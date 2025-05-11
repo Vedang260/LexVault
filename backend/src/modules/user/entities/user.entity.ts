@@ -1,5 +1,6 @@
 import { UserRole } from "src/common/enums/roles.enums";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Lawyer } from "src/modules/lawyer/entities/lawyer.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'users' })
 export class User{
@@ -20,6 +21,10 @@ export class User{
 
     @Column({ default: true })
     isActive: boolean;
+
+    @OneToOne(() => Lawyer, (lawyer) => lawyer.user, { cascade: true })
+    @JoinColumn()
+    lawyerProfile: Lawyer;
 
     @CreateDateColumn()
     createdAt: Date;
