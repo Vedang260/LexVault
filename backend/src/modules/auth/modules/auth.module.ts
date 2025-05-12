@@ -6,11 +6,13 @@ import { UsersModule } from '../../user/modules/user.module';
 import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../services/auth.service';
 import { JwtStrategy } from '../strategy/jwt.strategy';
+import { LawyerModule } from 'src/modules/lawyer/modules/lawyer.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }), // Ensure this is here
     UsersModule,
+    LawyerModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
