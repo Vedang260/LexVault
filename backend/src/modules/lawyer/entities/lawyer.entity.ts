@@ -27,7 +27,22 @@ export class Lawyer {
   specialization: LawSpecialization;
 
   @Column()
+  licenseIssueDate: Date;
+
+  @Column()
+  licenseExpiryDate: Date;
+
+  @Column()
+  phoneNumber: string;
+
+  @Column()
   yearsOfExperience: number;
+
+  @Column()
+  bio: string;
+
+  @Column()
+  totalCasesHandled: number;
 
   @Column({ type: 'decimal' })
   hourlyRate: number;
