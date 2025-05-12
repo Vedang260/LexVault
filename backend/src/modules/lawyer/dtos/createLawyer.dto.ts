@@ -27,4 +27,16 @@ export class CreateLawyerDto extends CreateUserDto{
     @IsNotEmpty()
     @IsString()
     firmName: string;
+
+    @IsNotEmpty()
+    phoneNumber: string;
+
+    @IsNotEmpty()
+    licenseIssueDate: Date;
+
+    @IsNotEmpty()
+    bio: string;
+
+    @IsNotEmpty()
+    licenseExpiryDate: Date;
 }
