@@ -11,6 +11,9 @@ export class Case{
     @PrimaryGeneratedColumn('uuid')
     caseId: string;
 
+    @Column('uuid')
+    clientId: string;
+    
     @Column()
     title: string;
 
@@ -56,6 +59,7 @@ export class Case{
     courtCaseNumber: string;
 
     @ManyToOne(() => User, (user) => user.casesAsClient)
+    @JoinColumn({ name: 'clientId' })
     client: User;
 
     @ManyToMany(() => Lawyer, (lawyer) => lawyer.cases)
