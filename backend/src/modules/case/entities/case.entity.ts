@@ -14,13 +14,13 @@ export class Case{
     @Column('uuid')
     clientId: string;
     
-    @Column()
+    @Column({ nullable: true })
     title: string;
 
-    @Column('text')
+    @Column('text', { nullable: true })
     description: string;
 
-    @Column({ unique: true })
+    @Column({ unique: true, nullable: true  })
     caseNumber: string;
 
     @Column({
@@ -33,6 +33,7 @@ export class Case{
     @Column({
         type: 'enum',
         enum: CaseCategory,
+        nullable: true
     })
     category: CaseCategory;
 
@@ -43,7 +44,7 @@ export class Case{
     })
     priority: CasePriority;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'date', nullable: true })
     openedDate: Date;
 
     @Column({ type: 'date', nullable: true })
