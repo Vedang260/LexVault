@@ -13,9 +13,12 @@ export class LawyerRepository{
     ) {}        
 
     // creates new lawyer
-    async createLawyer(createLawyerDto: Partial<CreateLawyerDto>): Promise<Lawyer> {
+    async createLawyer(userId: string, createLawyerDto: Partial<CreateLawyerDto>): Promise<Lawyer> {
         try{
-            const lawyer = this.lawyerRepository.create(createLawyerDto);
+            const lawyer = this.lawyerRepository.create({
+            ...createLawyerDto,
+            userId: userId   
+            });
             return this.lawyerRepository.save(lawyer);
         }catch(error){
             console.error('Error in creating new lawyer ', error.message);
@@ -31,6 +34,36 @@ export class LawyerRepository{
         }catch(error){
             console.error('Error in deleting a lawyer ', error.message);
             throw new InternalServerErrorException('Error in deleting a lawyer');
+        }
+    }
+
+    async findOneLawyer(lawyerId: string): Promise<Lawyer | null> {
+        try{
+            return await this.lawyerRepository.findOne({ where: {lawyerId} });
+        }catch(error){
+            console.error('Error in finding a lawyer: ', error.message);
+            throw new InternalServerErrorException('Error in finding a Lawyer');
+        }      
+    }
+
+    async verifyLawyer(lawyerId: string): Promise<boolean>{
+        try{
+            const result = await this.lawyerRepository.update({ lawyerId}, {isVerified: true});
+            return result.affected ? result.affected > 0 : false;
+        }catch(error){
+            console.error('Error in verifying a lawyer: ', error.message);
+            throw new InternalServerErrorException('Error in  verifying a lawyer');
+        }
+    }
+
+    async getAllLawyerRequests(): Promise<Lawyer[]>{
+        try{
+            return await this.lawyerRepository.find({
+                where: { isVerified: false }
+            });
+        }catch(error){
+            console.error('Error in fetching all lawyer requests: ', error.message);
+            throw new InternalServerErrorException('Error in fetching all lawyer requests');
         }
     }
 }

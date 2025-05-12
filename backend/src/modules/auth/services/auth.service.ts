@@ -6,11 +6,12 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../../user/dtos/createUser.dto';
 import { User } from '../../user/entities/user.entity';
 import { CreateLawyerDto } from 'src/modules/lawyer/dtos/createLawyer.dto';
+import { LawyerRepository } from 'src/modules/lawyer/repositories/lawyer.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-
+    private readonly lawyerRepository: LawyerRepository,
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
   ) {}
@@ -119,8 +120,9 @@ export class AuthService {
         role: createLawyerDto.role
       }
       // Create a new user
-      await this.userRepository.createUser(createUserDto);
-      
+      const user = await this.userRepository.createUser(createUserDto);
+
+      const lawyer = await this.lawyerRepository.createLawyer(user.userId, createLawyerDto);
       return {
         success: true,
         message: 'User registered successfully'
