@@ -35,8 +35,7 @@ export class UploadService {
 
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          resource_type: 'raw',
-          format: 'pdf',
+          resource_type: 'auto',
           folder,
           tags: ['legal_document'] // Optional tagging for organization
         },

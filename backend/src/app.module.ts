@@ -6,6 +6,7 @@ import { typeOrmConfig } from './config/database.config';
 import { AuthMiddleware } from './modules/auth/middlewares/auth.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { UploadModule } from './utils/uploads/modules/upload.module';
+import { LawyerModule } from './modules/lawyer/modules/lawyer.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UploadModule } from './utils/uploads/modules/upload.module';
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
     UsersModule,
+    LawyerModule,
     UploadModule
   ],
 
@@ -23,9 +25,11 @@ export class AppModule {
     .apply(AuthMiddleware)
     .exclude(
       { path: 'api/webhooks/stripe', method: RequestMethod.ALL }, // ✅ Exclude webhook
+      { path: 'uploads', method: RequestMethod.ALL}
     )
     .forRoutes(
       { path: 'users', method: RequestMethod.ALL },
+      { path: 'lawyer', method: RequestMethod.ALL },
     );
   }
 }

@@ -41,9 +41,6 @@ export class Lawyer {
   @Column()
   bio: string;
 
-  @Column()
-  totalCasesHandled: number;
-
   @Column({ type: 'decimal' })
   hourlyRate: number;
 
