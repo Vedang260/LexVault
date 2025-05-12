@@ -1,6 +1,7 @@
 import { LawSpecialization } from "src/common/enums/lawSpecialization.enums";
+import { Case } from "src/modules/case/entities/case.entity";
 import { User } from "src/modules/user/entities/user.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 // lawyer.entity.ts
 @Entity()
@@ -53,4 +54,14 @@ export class Lawyer {
   @OneToOne(() => User, (user) => user.lawyerProfile)
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @ManyToMany(() => Case, (caseEntity) => caseEntity.assignedLawyers)
+  cases: Case[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
 }
