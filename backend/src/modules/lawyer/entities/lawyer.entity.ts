@@ -1,12 +1,15 @@
 import { LawSpecialization } from "src/common/enums/lawSpecialization.enums";
 import { User } from "src/modules/user/entities/user.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 // lawyer.entity.ts
 @Entity()
 export class Lawyer {
   @PrimaryGeneratedColumn('uuid')
   lawyerId: string;
+
+  @Column('uuid')
+  userId: string;
 
   @Column()
   barLicenseNumber: string;
@@ -36,5 +39,6 @@ export class Lawyer {
   isVerified: boolean;
 
   @OneToOne(() => User, (user) => user.lawyerProfile)
+  @JoinColumn({ name: 'userId' })
   user: User;
 }

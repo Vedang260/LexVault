@@ -5,6 +5,7 @@ import { LoginDto } from '../dtos/login.dto';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../../user/dtos/createUser.dto';
 import { User } from '../../user/entities/user.entity';
+import { CreateLawyerDto } from 'src/modules/lawyer/dtos/createLawyer.dto';
 
 @Injectable()
 export class AuthService {
@@ -95,6 +96,40 @@ export class AuthService {
       return {
         success: false,
         message: 'Failed to register user'
+      }
+    }
+  }
+
+  async registerLawyer(createLawyerDto: CreateLawyerDto): Promise<{ success:boolean; message: string;}>{
+    try{
+      // Check if lawyer already Exists
+      const existingUser = await this.userRepository.findUserByEmail(createLawyerDto.email);
+      if(existingUser){
+        throw new ConflictException('Lawyer already exists');
+      }
+      // Hash the password
+      const salt = await bcrypt.genSalt();
+      createLawyerDto.password = await bcrypt.hash(createLawyerDto.password, salt);
+
+      const createUserDto : CreateUserDto = {
+        firstName:createLawyerDto.firstName,
+        lastName:createLawyerDto.lastName,
+        email:createLawyerDto.email,
+        password: createLawyerDto.password,
+        role: createLawyerDto.role
+      }
+      // Create a new user
+      await this.userRepository.createUser(createUserDto);
+      
+      return {
+        success: true,
+        message: 'User registered successfully'
+      };
+    }catch(error){
+      console.error('Error in Lawyer Registration: ', error.message);
+      return {
+        success: false,
+        message: 'Failed to register lawyer'
       }
     }
   }
