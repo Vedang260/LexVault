@@ -4,7 +4,10 @@ import { UserRole } from 'src/common/enums/roles.enums';
 // register dto
 export class CreateUserDto {
     @IsNotEmpty()
-    username: string;
+    firstName: string;
+
+    @IsNotEmpty()
+    lastName: string;
 
     @IsNotEmpty()
     @IsEmail()
