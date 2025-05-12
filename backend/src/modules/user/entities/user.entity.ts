@@ -8,8 +8,11 @@ export class User{
     userId: string;
 
     @Column()
-    username: string;
+    firstName: string;
 
+    @Column()
+    lastName: string;
+    
     @Column({ unique: true })
     email: string;
 
@@ -23,7 +26,6 @@ export class User{
     isActive: boolean;
 
     @OneToOne(() => Lawyer, (lawyer) => lawyer.user, { cascade: true })
-    @JoinColumn()
     lawyerProfile: Lawyer;
 
     @CreateDateColumn()

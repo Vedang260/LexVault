@@ -48,7 +48,7 @@ export class UserRepository{
     async findAll(): Promise<User[]> {
       try{
         return this.userRepository.find({
-            select: ['userId', 'username', 'email', 'role'], // only desired fields
+            select: ['userId', 'firstName', 'lastName', 'email', 'role'], // only desired fields
             where: {
                 role: Not(UserRole.ADMIN) // exclude admins
             }
