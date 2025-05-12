@@ -7,6 +7,7 @@ import { AuthMiddleware } from './modules/auth/middlewares/auth.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { UploadModule } from './utils/uploads/modules/upload.module';
 import { LawyerModule } from './modules/lawyer/modules/lawyer.module';
+import { CaseModule } from './modules/case/modules/case.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { LawyerModule } from './modules/lawyer/modules/lawyer.module';
     AuthModule,
     UsersModule,
     LawyerModule,
+    CaseModule,
     UploadModule
   ],
 
@@ -30,6 +32,7 @@ export class AppModule {
     .forRoutes(
       { path: 'users', method: RequestMethod.ALL },
       { path: 'lawyer', method: RequestMethod.ALL },
+      { path: 'case', method: RequestMethod.ALL },
     );
   }
 }

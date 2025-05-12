@@ -30,6 +30,10 @@ export class LawyerService {
         const lawyer = await this.lawyerRepository.findOneLawyer(lawyerId);
         if(lawyer){
             await this.lawyerRepository.verifyLawyer(lawyerId);
+            return{
+              success: true,
+              message: 'Lawyer is verified'
+            }
         }
         return{
             success: false,
