@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/modules/auth.module';
 import { typeOrmConfig } from './config/database.config';
 import { AuthMiddleware } from './modules/auth/middlewares/auth.middleware';
 import { ConfigModule } from '@nestjs/config';
+import { UploadModule } from './utils/uploads/modules/upload.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
     UsersModule,
+    UploadModule
   ],
 
 })
