@@ -11,6 +11,12 @@ export class Lawyer {
   @Column()
   barLicenseNumber: string;
 
+  @Column()
+  licenseDocumentUrl: string;
+
+  @Column()
+  licensePublicId: string;
+  
   @Column({
     type: 'enum',
     enum: LawSpecialization
