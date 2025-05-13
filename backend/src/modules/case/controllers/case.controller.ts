@@ -26,7 +26,7 @@ export class CaseController{
     @Put(':id')
     @UseGuards(RolesGuard)
     @Roles(UserRole.LAWYER)
-    async updateCase(@Param('id') caseId: string, @Body() body: {updateCaseDto: UpdateCaseDto}){
+    async updateCase(@Param('id') caseId: string, @Body() body: {updateCaseDto: Partial<UpdateCaseDto>}){
         const { updateCaseDto } = body;
         return await this.caseService.updateCaseStatus(caseId, updateCaseDto);
     }
@@ -36,5 +36,13 @@ export class CaseController{
     @Roles(UserRole.ADMIN)
     async getCaseRequest(){
         return await this.caseService.getUnassignedCases();
+    }
+
+    @Post('/assign-lawyer')
+    @UseGuards(RolesGuard)
+    @Roles(UserRole.ADMIN)
+    async assignLawyer(@Body() body: { caseId: string, lawyerIds: string[]}){
+        const {caseId, lawyerIds} = body;
+        return await this.caseService.assignLawyers(caseId, lawyerIds);
     }
 }

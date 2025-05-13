@@ -38,7 +38,7 @@ export class CaseService{
         }
     }
 
-    async updateCaseStatus(caseId: string, updateCaseDto: UpdateCaseDto){
+    async updateCaseStatus(caseId: string, updateCaseDto: Partial<UpdateCaseDto>){
         try{
             const result = await this.caseRepository.updateCase(caseId, updateCaseDto);
             if(result){
@@ -74,6 +74,25 @@ export class CaseService{
                 success: false,
                 message: 'Failed to fetch unasigned cases',
                 cases: null
+            }
+        }
+    }
+
+    async assignLawyers(caseId: string, lawyerIds: string[]){
+        try{
+            const result = await this.caseRepository.assignLawyers(caseId, lawyerIds);
+            if(result){
+                return{
+                    success: true,
+                    message: 'Lawyer is assigned'
+                }
+            }
+            throw new Error('Unable to assign the Lawyer');
+        }catch(error){
+            console.error('Error in assigning case to the Lawyer: ', error.message);
+            return{
+                success: false,
+                message: 'Failed to assign case to Lawyer'
             }
         }
     }

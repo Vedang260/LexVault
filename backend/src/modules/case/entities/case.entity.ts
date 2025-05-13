@@ -69,7 +69,7 @@ export class Case{
 
     @ManyToMany(() => Lawyer,  (lawyer) => lawyer.cases)
     @JoinTable({
-        name: 'case_assignedLawyers',
+        name: 'case_assignedlawyers',
         joinColumn: {
             name: 'caseId',
             referencedColumnName: 'caseId',

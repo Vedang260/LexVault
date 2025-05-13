@@ -26,7 +26,7 @@ export class CaseRepository{
         }
     }
 
-    async assignLawyers(caseId: string, lawyerIds: string[]) {
+    async assignLawyers(caseId: string, lawyerIds: string[]): Promise<boolean> {
         const queryRunner = this.dataSource.createQueryRunner();
 
         await queryRunner.connect();
@@ -55,20 +55,25 @@ export class CaseRepository{
 
             // 3. Remove existing mappings (optional, if you want to replace)
             await queryRunner.query(
-                `DELETE FROM case_assignedLawyers WHERE "caseId" = $1`,
+                `DELETE FROM case_assignedlawyers WHERE "caseId" = $1`,
                 [caseId]
             );
 
             // 4. Insert new mappings
             for (const lawyerId of lawyerIds) {
                 await queryRunner.query(
-                `INSERT INTO case_assignedLawyers("caseId", "lawyerId") VALUES ($1, $2)`,
+                `INSERT INTO case_assignedlawyers("caseId", "lawyerId") VALUES ($1, $2)`,
                 [caseId, lawyerId]
                 );
             }
 
+            await queryRunner.query(
+                `UPDATE cases SET assigned = $2 WHERE "caseId" = $1`,
+                [caseId, true]
+            );
+
             await queryRunner.commitTransaction();
-            return { message: 'Lawyers assigned successfully' };
+            return true;
         } catch (error) {
             await queryRunner.rollbackTransaction();
             console.error('Error in assigning Lawyers to the case: ', error.message);
@@ -95,7 +100,7 @@ export class CaseRepository{
         }
     }
 
-    async updateCase(caseId: string, updateCasedto: UpdateCaseDto): Promise<boolean>{
+    async updateCase(caseId: string, updateCasedto: Partial<UpdateCaseDto>): Promise<boolean>{
         try{
             const result = await this.caseRepository.update({caseId}, updateCasedto);
             return result.affected ? result.affected > 0 : false;
