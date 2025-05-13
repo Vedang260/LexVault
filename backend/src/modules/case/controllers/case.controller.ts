@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from "@nestjs/common";
 import { CaseService } from "../services/case.service";
 import { CreateCaseDto } from "../dtos/createCase.dto";
 import { JwtAuthGuard } from "src/modules/auth/guards/jwt_auth.guard";
@@ -29,5 +29,12 @@ export class CaseController{
     async updateCase(@Param('id') caseId: string, @Body() body: {updateCaseDto: UpdateCaseDto}){
         const { updateCaseDto } = body;
         return await this.caseService.updateCaseStatus(caseId, updateCaseDto);
+    }
+
+    @Get('/request')
+    @UseGuards(RolesGuard)
+    @Roles(UserRole.ADMIN)
+    async getCaseRequest(){
+        return await this.caseService.getUnassignedCases();
     }
 }

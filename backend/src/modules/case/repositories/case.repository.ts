@@ -104,4 +104,25 @@ export class CaseRepository{
             throw new InternalServerErrorException('Error in updating the case status');
         }
     }
+
+     async getUnassignedCases() {
+        try {
+            return await this.caseRepository
+            .createQueryBuilder('case')
+            .leftJoinAndSelect('case.client', 'client')
+            .select([
+                'case.caseId',
+                'case.description',
+                'case.assigned',
+                'client.firstName',
+                'client.lastName'
+            ])
+            .where('case.assigned = :assigned', { assigned: false })
+            .orderBy('case.createdAt', 'DESC')
+            .getMany();
+        } catch (error) {
+            console.error('Error fetching unassigned cases:', error.message);
+            throw new InternalServerErrorException('Unable to fetch unassigned cases');
+        }
+    }
 }

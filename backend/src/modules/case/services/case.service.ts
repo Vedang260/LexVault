@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { CaseRepository } from "../repositories/case.repository";
 import { CreateCaseDto } from "../dtos/createCase.dto";
 import { CaseStatus } from "src/common/enums/caseStatus.enums";
 import { UpdateCaseDto } from "../dtos/updateCase.dto";
+import { Case } from "../entities/case.entity";
 
 @Injectable()
 export class CaseService{
@@ -55,6 +56,24 @@ export class CaseService{
             return{
                 success: false,
                 message: 'Failed to update the case status'
+            }
+        }
+    }
+
+    async getUnassignedCases(): Promise<{success:boolean; message:string; cases: Case[]|null}>{
+        try{
+            const cases = await this.caseRepository.getUnassignedCases();
+            return{
+                success: true,
+                message: 'Unassigned cases are fetched',
+                cases: cases
+            }
+        }catch(error){
+            console.error('Error in fetching un-assigned cases: ', error.message);
+            return{
+                success: false,
+                message: 'Failed to fetch unasigned cases',
+                cases: null
             }
         }
     }
