@@ -6,6 +6,7 @@ import { User } from "src/modules/user/entities/user.entity";
 import { Document } from  "src/modules/document/entities/document.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Note } from "src/modules/note/entities/note.entity";
+import { Event } from "src/modules/event/entities/event.entity";
 
 @Entity({ name: 'cases' })
 export class Case{
@@ -87,6 +88,9 @@ export class Case{
     @OneToMany(() => Note, (note) => note.case)
     notes: Note[];
 
+    @OneToMany(() => Event, (event) => event.case)
+    events: Event[];
+    
     @CreateDateColumn()
     createdAt: Date;
 
