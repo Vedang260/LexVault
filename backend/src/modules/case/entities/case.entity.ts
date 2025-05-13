@@ -66,7 +66,7 @@ export class Case{
     @JoinColumn({ name: 'clientId' })
     client: User;
 
-    @ManyToMany(() => Lawyer, (lawyer) => lawyer.cases)
+    @ManyToMany(() => Lawyer,  (lawyer) => lawyer.cases)
     @JoinTable()
     assignedLawyers: Lawyer[];
   

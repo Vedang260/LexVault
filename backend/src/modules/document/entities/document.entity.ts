@@ -38,6 +38,7 @@ export class Document{
     isConfidential: boolean;
 
     @ManyToOne(() => User, (user) => user.uploadedDocuments, { nullable: true })
+    @JoinColumn({ name: 'userId' })
     uploadedBy: User;
 
     @ManyToOne(() => Case, (caseEntity) => caseEntity.documents)
