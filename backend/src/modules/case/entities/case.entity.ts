@@ -5,6 +5,7 @@ import { Lawyer } from "src/modules/lawyer/entities/lawyer.entity";
 import { User } from "src/modules/user/entities/user.entity";
 import { Document } from  "src/modules/document/entities/document.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Note } from "src/modules/note/entities/note.entity";
 
 @Entity({ name: 'cases' })
 export class Case{
@@ -80,8 +81,11 @@ export class Case{
     })
     assignedLawyers: Lawyer[];
   
-    @Column({ type: 'boolean', default: false})
+    @Column({ default: false})
     assigned: boolean;
+
+    @OneToMany(() => Note, (note) => note.case)
+    notes: Note[];
 
     @CreateDateColumn()
     createdAt: Date;
