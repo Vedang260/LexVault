@@ -1,5 +1,5 @@
 // note.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Case } from '../../case/entities/case.entity';
 
@@ -7,6 +7,15 @@ import { Case } from '../../case/entities/case.entity';
 export class Note {
   @PrimaryGeneratedColumn('uuid')
   noteId: string;
+
+  @Column()
+  title: string;
+
+  @Column('uuid')
+  userId: string;
+
+  @Column('uuid')
+  caseId: string;
 
   @Column('text')
   content: string;
@@ -22,8 +31,10 @@ export class Note {
 
   // Relationships
   @ManyToOne(() => User, (user) => user.notes)
+  @JoinColumn({ name: 'userId' })
   lawyer: User;
 
   @ManyToOne(() => Case, (caseEntity) => caseEntity.notes)
+  @JoinColumn({ name: 'caseId' })
   case: Case;
 }
