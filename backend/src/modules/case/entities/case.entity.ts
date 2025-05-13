@@ -67,7 +67,17 @@ export class Case{
     client: User;
 
     @ManyToMany(() => Lawyer,  (lawyer) => lawyer.cases)
-    @JoinTable()
+    @JoinTable({
+        name: 'case_assignedLawyers',
+        joinColumn: {
+            name: 'caseId',
+            referencedColumnName: 'caseId',
+        },
+        inverseJoinColumn: {
+            name: 'lawyerId',
+            referencedColumnName: 'lawyerId',
+        },
+    })
     assignedLawyers: Lawyer[];
   
     @CreateDateColumn()
