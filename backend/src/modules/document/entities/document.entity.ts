@@ -1,4 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { UserRole } from "src/common/enums/roles.enums";
+import { Case } from "src/modules/case/entities/case.entity";
+import { Tag } from "src/modules/tags/entities/tag.entity";
+import { User } from "src/modules/user/entities/user.entity";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'documents'})
 export class Document{
@@ -6,8 +10,17 @@ export class Document{
     @PrimaryGeneratedColumn('uuid')
     documentId: string;
 
+    @Column({
+        type: 'enum',
+        enum: DocumentType,
+    })
+    type: DocumentType;
+
     @Column('uuid')
     caseId: string;
+
+    @Column('uuid')
+    userId: string;
 
     @Column()
     title: string;
@@ -23,4 +36,15 @@ export class Document{
 
     @Column({ default: false })
     isConfidential: boolean;
+
+    @ManyToOne(() => User, (user) => user.uploadedDocuments, { nullable: true })
+    uploadedBy: User;
+
+    @ManyToOne(() => Case, (caseEntity) => caseEntity.documents)
+    @JoinColumn({ name: 'caseId'})
+    case: Case;
+
+    @ManyToMany(() => Tag, (tag) => tag.documents)
+    @JoinTable()
+    tags: Tag[];
 }

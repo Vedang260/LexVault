@@ -1,10 +1,10 @@
 import { CaseCategory } from "src/common/enums/caseCategory.enums";
 import { CasePriority } from "src/common/enums/casePriority.enums";
 import { CaseStatus } from "src/common/enums/caseStatus.enums";
-import { UserRole } from "src/common/enums/roles.enums";
 import { Lawyer } from "src/modules/lawyer/entities/lawyer.entity";
 import { User } from "src/modules/user/entities/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Document } from  "src/modules/document/entities/document.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'cases' })
 export class Case{
@@ -58,6 +58,9 @@ export class Case{
 
     @Column({ nullable: true })
     courtCaseNumber: string;
+
+    @OneToMany(() => Document, (document) => document.case)
+    documents: Document[];
 
     @ManyToOne(() => User, (user) => user.casesAsClient)
     @JoinColumn({ name: 'clientId' })
