@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UploadModule } from './utils/uploads/modules/upload.module';
 import { LawyerModule } from './modules/lawyer/modules/lawyer.module';
 import { CaseModule } from './modules/case/modules/case.module';
+import { TagModule } from './modules/tags/modules/tag.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CaseModule } from './modules/case/modules/case.module';
     UsersModule,
     LawyerModule,
     CaseModule,
+    TagModule,
     UploadModule
   ],
 
@@ -33,6 +35,7 @@ export class AppModule {
       { path: 'users', method: RequestMethod.ALL },
       { path: 'lawyer', method: RequestMethod.ALL },
       { path: 'case', method: RequestMethod.ALL },
+      { path: 'tags', method: RequestMethod.ALL },
     );
   }
 }
