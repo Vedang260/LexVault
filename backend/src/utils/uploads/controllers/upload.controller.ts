@@ -11,4 +11,10 @@ export class UploadController {
   async uploadLicense(@UploadedFile() file: Express.Multer.File) {
     return this.uploadService.uploadPDF(file, 'lawyer_licenses');
   }
+
+  @Post('document')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadDocuments(@UploadedFile() file: Express.Multer.File){
+    return this.uploadService.uploadPDF(file, 'documents');
+  }
 }
