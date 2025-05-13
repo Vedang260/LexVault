@@ -80,6 +80,9 @@ export class Case{
     })
     assignedLawyers: Lawyer[];
   
+    @Column({ type: 'boolean', default: false})
+    assigned: boolean;
+
     @CreateDateColumn()
     createdAt: Date;
 
