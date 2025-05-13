@@ -48,7 +48,7 @@ export class CaseRepository{
         }
     }
 
-    async updateCaseStatus(caseId: string, status: CaseStatus): Promise<boolean>{
+    async updateCase(caseId: string, status: CaseStatus): Promise<boolean>{
         try{
             const result = await this.caseRepository.update({caseId}, {status});
             return result.affected ? result.affected > 0 : false;
