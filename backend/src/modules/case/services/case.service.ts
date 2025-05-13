@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CaseRepository } from "../repositories/case.repository";
 import { CreateCaseDto } from "../dtos/createCase.dto";
 import { CaseStatus } from "src/common/enums/caseStatus.enums";
+import { UpdateCaseDto } from "../dtos/updateCase.dto";
 
 @Injectable()
 export class CaseService{
@@ -36,9 +37,9 @@ export class CaseService{
         }
     }
 
-    async updateCaseStatus(caseId: string, status: CaseStatus){
+    async updateCaseStatus(caseId: string, updateCaseDto: UpdateCaseDto){
         try{
-            const result = await this.caseRepository.updateCaseStatus(caseId, status);
+            const result = await this.caseRepository.updateCase(caseId, updateCaseDto);
             if(result){
                 return{
                     success: true,

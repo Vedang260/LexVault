@@ -1,4 +1,4 @@
-import { UserRole } from "src/common/enums/roles.enums";
+import { DocumentType } from "src/common/enums/documentType.enums";
 import { Case } from "src/modules/case/entities/case.entity";
 import { Tag } from "src/modules/tags/entities/tag.entity";
 import { User } from "src/modules/user/entities/user.entity";

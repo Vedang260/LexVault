@@ -6,6 +6,7 @@ import { RolesGuard } from "src/modules/auth/guards/roles.guard";
 import { Roles } from "src/common/decorators/roles.decorators";
 import { UserRole } from "src/common/enums/roles.enums";
 import { CaseStatus } from "src/common/enums/caseStatus.enums";
+import { UpdateCaseDto } from "../dtos/updateCase.dto";
 
 @Controller('case')
 @UseGuards(JwtAuthGuard)
@@ -25,8 +26,8 @@ export class CaseController{
     @Put(':id')
     @UseGuards(RolesGuard)
     @Roles(UserRole.LAWYER)
-    async updateStatus(@Param('id') caseId: string, @Body() body: {status: CaseStatus}){
-        const { status } = body;
-        await this.caseService.updateCaseStatus(caseId, status);
+    async updateCase(@Param('id') caseId: string, @Body() body: {updateCaseDto: UpdateCaseDto}){
+        const { updateCaseDto } = body;
+        await this.caseService.updateCaseStatus(caseId, updateCaseDto);
     }
 }

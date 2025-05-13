@@ -4,6 +4,7 @@ import { Case } from "../entities/case.entity";
 import { Repository } from "typeorm";
 import { CreateCaseDto } from "../dtos/createCase.dto";
 import { CaseStatus } from "src/common/enums/caseStatus.enums";
+import { UpdateCaseDto } from "../dtos/updateCase.dto";
 
 @Injectable()
 export class CaseRepository{
@@ -48,9 +49,9 @@ export class CaseRepository{
         }
     }
 
-    async updateCase(caseId: string, status: CaseStatus): Promise<boolean>{
+    async updateCase(caseId: string, updateCasedto: UpdateCaseDto): Promise<boolean>{
         try{
-            const result = await this.caseRepository.update({caseId}, {status});
+            const result = await this.caseRepository.update({caseId}, updateCasedto);
             return result.affected ? result.affected > 0 : false;
         }catch(error){
             console.error('Error in updating the case status: ', error.message);
