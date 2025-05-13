@@ -16,6 +16,9 @@ export class Document{
     })
     type: DocumentType;
 
+    @Column()
+    documentUrl: string;
+
     @Column('uuid')
     caseId: string;
 
@@ -46,6 +49,16 @@ export class Document{
     case: Case;
 
     @ManyToMany(() => Tag, (tag) => tag.documents)
-    @JoinTable()
+    @JoinTable({
+        name: 'document_tags',
+        joinColumn: {
+            name: 'documentId',
+            referencedColumnName: 'documentId',
+        },
+        inverseJoinColumn: {
+            name: 'tagId',
+            referencedColumnName: 'tagId',
+        },
+    })
     tags: Tag[];
 }
