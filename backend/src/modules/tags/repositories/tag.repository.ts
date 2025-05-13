@@ -12,7 +12,7 @@ export class TagRepository{
         private readonly tagRepository: Repository<Tag>
     ){}
 
-    async createNewTag(createTagDto: CreateTagDto): Promise<{ }>{
+    async createNewTag(createTagDto: CreateTagDto): Promise<Tag|null>{
         try{
             const newTag = this.tagRepository.create(createTagDto);
             return await this.tagRepository.save(newTag);

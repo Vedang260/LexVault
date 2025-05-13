@@ -20,7 +20,7 @@ export class CaseController{
     @Roles(UserRole.CLIENT)
     async createNewCase(@Req() req: Request, @Body() body: {createCase: Partial<CreateCaseDto>}){
         const { createCase } =  body;
-        await this.caseService.createNewCase(req['user'].userId, createCase);
+        return await this.caseService.createNewCase(req['user'].userId, createCase);
     }
 
     @Put(':id')
@@ -28,6 +28,6 @@ export class CaseController{
     @Roles(UserRole.LAWYER)
     async updateCase(@Param('id') caseId: string, @Body() body: {updateCaseDto: UpdateCaseDto}){
         const { updateCaseDto } = body;
-        await this.caseService.updateCaseStatus(caseId, updateCaseDto);
+        return await this.caseService.updateCaseStatus(caseId, updateCaseDto);
     }
 }
