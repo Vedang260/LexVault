@@ -7,7 +7,7 @@ export class Event {
   @PrimaryGeneratedColumn('uuid')
   eventId: string;
 
-  @Column()
+  @Column('uuid')
   caseId: string;
 
   @Column()

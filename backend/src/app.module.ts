@@ -10,6 +10,7 @@ import { LawyerModule } from './modules/lawyer/modules/lawyer.module';
 import { CaseModule } from './modules/case/modules/case.module';
 import { TagModule } from './modules/tags/modules/tag.module';
 import { NoteModule } from './modules/note/modules/note.module';
+import { EventModule } from './modules/event/modules/event.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { NoteModule } from './modules/note/modules/note.module';
     CaseModule,
     TagModule,
     NoteModule,
+    EventModule,
     UploadModule
   ],
 
