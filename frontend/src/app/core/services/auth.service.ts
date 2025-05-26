@@ -25,7 +25,7 @@ interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-    private apiUrl = `${environment.backendUrl}/auth/login`;
+    private apiUrl = `${environment.backendUrl}`;
     private currentUserSubject: BehaviorSubject<User | null>;
     public currentUser: Observable<User | null>;
 
@@ -54,7 +54,7 @@ export class AuthService {
     }
 
     login(credentials: { email: string; password: string }): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>('/api/auth/login', credentials).pipe(
+        return this.http.post<AuthResponse>(`${this.apiUrl}/api/auth/login`, credentials).pipe(
         tap(response => {
             // Store user details and token in localStorage
             localStorage.setItem('currentUser', JSON.stringify(response.user));

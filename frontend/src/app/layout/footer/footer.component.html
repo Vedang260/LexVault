@@ -1,12 +1,29 @@
-<footer class="bg-primary text-white py-4 shadow-lg">
+<!-- footer.component.html -->
+<footer class="bg-surface text-textPrimary py-6 border-t border-divider">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row justify-between items-center">
       <div class="mb-4 md:mb-0">
-        <h2 class="text-xl font-bold">LexVault</h2>
-        <p class="text-sm">Legal Case Management & Documentation System</p>
+        <h2 class="text-xl font-bold text-primary flex items-center">
+          <span class="bg-primary text-white rounded-lg px-2 py-1 mr-2">LV</span>
+          LexVault
+        </h2>
+        <p class="text-sm text-textSecondary mt-1">Legal Case Management & Documentation System</p>
       </div>
-      <div class="text-sm">
-        <p>&copy; {{ currentYear }} LexVault. All rights reserved.</p>
+      
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="flex space-x-4 mb-4 md:mb-0 md:mr-6">
+          <a 
+            *ngFor="let link of links"
+            [routerLink]="link.route"
+            class="text-sm text-textPrimary hover:text-primary transition-colors duration-200"
+          >
+            {{ link.label }}
+          </a>
+        </div>
+        
+        <div class="text-sm text-textSecondary">
+          <p>&copy; {{ currentYear }} LexVault. All rights reserved.</p>
+        </div>
       </div>
     </div>
   </div>

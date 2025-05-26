@@ -1,27 +1,41 @@
-<aside class="bg-surface text-textPrimary w-64 fixed top-0 left-0 h-full shadow-lg z-40 pt-16">
-  <div class="p-4 border-b border-gray-200">
-    <h2 class="text-2xl font-bold text-primary">LexVault</h2>
-    <p class="text-sm text-textSecondary">{{ role }}</p>
+<aside [@sidebarAnimation]="sidebarState" class="bg-surface text-textPrimary w-64 fixed top-0 left-0 h-full shadow-lg z-10 pt-16 transition-all duration-300 ease-in-out" [ngClass]="{'w-20': !isExpanded, 'w-64': isExpanded}">
+  <button (click)="toggleSidebar()" class="absolute top-4 right-4 text-textPrimary hover:text-accent focus:outline-none transition-transform duration-200" [ngClass]="{'rotate-180': !isExpanded}">
+    <fa-icon [icon]="faBars" class="text-lg"></fa-icon>
+  </button>
+  <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      
+      <fa-icon [icon]="faScaleBalanced" class="text-5xl text-primary mr-4"></fa-icon>
+      <h2 class="text-2xl font-bold text-primary transition-opacity duration-200" [ngClass]="{'opacity-0 hidden': !isExpanded, 'opacity-100': isExpanded}">
+        LexVault
+      </h2>
+    </div>
+  </div>
+  <div class="p-4" *ngIf="isExpanded && !isLoading">
+    <p class="text-sm text-textSecondary">{{ getRoleDisplayName() }}</p>
     <p class="text-sm font-medium mt-1">{{ username }}</p>
   </div>
-  
-  <nav class="mt-4">
+  <nav class="mt-4 overflow-y-auto h-[calc(100vh-200px)]">
     <ul>
-      <li *ngFor="let item of filteredNavItems">
-        <a [routerLink]="item.route" 
-           routerLinkActive="bg-primary text-white"
-           class="flex items-center px-4 py-3 text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">
-          <fa-icon [icon]="item.icon" class="mr-3"></fa-icon>
-          {{ item.label }}
+      <li *ngFor="let item of filteredNavItems" class="relative group">
+        <a [routerLink]="item.route" routerLinkActive="bg-primary text-white" class="flex items-center px-4 py-3 text-sm font-medium hover:bg-primary hover:text-white transition-all duration-200 transform hover:scale-105" [ngClass]="{'justify-center': !isExpanded}">
+          <fa-icon [icon]="item.icon" class="mr-3 text-lg" [ngClass]="{'mr-0': !isExpanded}"></fa-icon>
+          <span class="transition-opacity duration-200" [ngClass]="{'opacity-0 hidden': !isExpanded, 'opacity-100': isExpanded}">
+            {{ item.label }}
+          </span>
+          <span *ngIf="!isExpanded" class="absolute left-full ml-2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            {{ item.label }}
+          </span>
         </a>
       </li>
     </ul>
   </nav>
-  
-  <div class="absolute bottom-0 w-full p-4 border-t border-gray-200">
-    <a (click)="logout()"class="flex items-center text-sm font-medium text-textPrimary hover:text-accent">
-      <fa-icon [icon]="faSignOutAlt" class="mr-3"></fa-icon>
-      Logout
+  <div class="absolute bottom-20 w-full p-4 border-t border-gray-200">
+    <a (click)="logout()" class="flex items-center text-sm font-medium text-textPrimary hover:text-accent transition-all duration-200 transform hover:scale-105" [ngClass]="{'justify-center': !isExpanded}">
+      <fa-icon [icon]="faSignOutAlt" class="mr-3 text-lg" [ngClass]="{'mr-0': !isExpanded}"></fa-icon>
+      <span class="transition-opacity duration-200" [ngClass]="{'opacity-0 hidden': !isExpanded, 'opacity-100': isExpanded}">
+        Logout
+      </span>
     </a>
   </div>
 </aside>

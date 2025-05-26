@@ -11,17 +11,17 @@ export const routes: Routes = [
             path: 'client',
             canActivate: [RoleGuard],
             data: { roles: [Role.CLIENT]},
-            // children: [{
-            //     path: 'dashboard',
-            //     loadComponent: 
-            // }]
-        }, {
-            path: 'admin',
-            canActivate: [RoleGuard],
-            data: { roles: [Role.ADMIN]},
             children: [{
-                path: 'dashboard',
+                path: 'addCase',
+                loadComponent: () => import('./features/client/addCase/addCase.component').then(m => m.AddCaseComponent)
             }]
+        // }, {
+        //     path: 'admin',
+        //     canActivate: [RoleGuard],
+        //     data: { roles: [Role.ADMIN]},
+        //     children: [{
+        //         path: 'dashboard',
+        //     }]
         // }, {
         //     path: 'lawyer',
         //     canActivate: [RoleGuard],

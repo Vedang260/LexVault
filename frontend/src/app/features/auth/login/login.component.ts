@@ -41,10 +41,12 @@ export class LoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: (response) => {
+        console.log(response);
         if (response.success) {
           // this.router.navigate(['/dashboard']);
           this.toastr.success(response.message);
           console.log(response.message);
+          this.router.navigate(['/client/addCase']);
         } else {
           // this.errorMessage = response.message;
           this.toastr.error(response.message);
