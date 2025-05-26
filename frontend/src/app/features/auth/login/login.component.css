@@ -1,0 +1,29 @@
+/* Custom styles to enhance the design */
+:host {
+  display: block;
+  height: 100vh;
+}
+
+/* Animation for form inputs */
+input:focus {
+  transition: all 0.3s ease;
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: rgb(159, 100, 4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .min-h-screen {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .bg-primary {
+    padding: 4rem 1.5rem;
+  }
+}
