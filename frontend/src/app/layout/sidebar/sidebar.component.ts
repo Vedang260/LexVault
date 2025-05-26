@@ -3,6 +3,9 @@ import { AuthService } from '../../core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { faHome, faUser, faUsers, faGavel, faFileAlt, faCalendarAlt, faChartBar, faCog, faSignOutAlt, faBriefcase, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { Role } from '../../core/constants/role.enum';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RouterModule } from '@angular/router';
 
 interface NavItem {
   label: string;
@@ -13,6 +16,8 @@ interface NavItem {
 
 @Component({
   selector: 'app-sidebar',
+  standalone: true,
+  imports: [CommonModule, FontAwesomeModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })

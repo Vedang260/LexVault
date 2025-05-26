@@ -11,9 +11,10 @@ export const routes: Routes = [
             path: 'client',
             canActivate: [RoleGuard],
             data: { roles: [Role.CLIENT]},
-            children: [{
-                path: 'dashboard',
-            }]
+            // children: [{
+            //     path: 'dashboard',
+            //     loadComponent: 
+            // }]
         }, {
             path: 'admin',
             canActivate: [RoleGuard],
@@ -21,13 +22,13 @@ export const routes: Routes = [
             children: [{
                 path: 'dashboard',
             }]
-        }, {
-            path: 'lawyer',
-            canActivate: [RoleGuard],
-            data: { roles: [Role.LAWYER]},
-            children: [{
-                path: 'dashboard',
-            }]
+        // }, {
+        //     path: 'lawyer',
+        //     canActivate: [RoleGuard],
+        //     data: { roles: [Role.LAWYER]},
+        //     children: [{
+        //         path: 'dashboard',
+        //     }]
         }]
     }
 ];
