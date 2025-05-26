@@ -1,0 +1,39 @@
+/* Add custom styles to enhance the form */
+textarea {
+  min-height: 150px;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(78, 52, 46, 0.1); /* primary color with opacity */
+  border-color: #4E342E; /* primary color */
+}
+
+/* Button hover effects */
+button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .flex.justify-end {
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+  
+  button {
+    width: 100%;
+  }
+}
+
+/* Animation for the tips section */
+ul li {
+  transition: all 0.3s ease;
+}
+
+ul li:hover {
+  transform: translateX(5px);
+  color: #5D4037; /* textSecondary color */
+}

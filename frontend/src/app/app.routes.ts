@@ -9,26 +9,11 @@ export const routes: Routes = [
     { path: '', component: MainLayoutComponent, canActivate: [AuthGuard], 
         children:[{
             path: 'client',
-            canActivate: [RoleGuard],
-            data: { roles: [Role.CLIENT]},
+            canActivate: [RoleGuard([Role.CLIENT])],
             children: [{
                 path: 'addCase',
-                loadComponent: () => import('./features/client/addCase/addCase.component').then(m => m.AddCaseComponent)
+                loadComponent: () => import('./features/client/add-case/add-case.component').then(m => m.AddCaseComponent)
             }]
-        // }, {
-        //     path: 'admin',
-        //     canActivate: [RoleGuard],
-        //     data: { roles: [Role.ADMIN]},
-        //     children: [{
-        //         path: 'dashboard',
-        //     }]
-        // }, {
-        //     path: 'lawyer',
-        //     canActivate: [RoleGuard],
-        //     data: { roles: [Role.LAWYER]},
-        //     children: [{
-        //         path: 'dashboard',
-        //     }]
         }]
     }
 ];

@@ -16,11 +16,12 @@ export const RoleGuard: (allowedRoles: Role[]) => CanActivateFn = (allowedRoles)
     }
 
     if (allowedRoles.includes(user?.role)) {
+      console.log('Role is getting matched');
       return true;
     }
 
     // Redirect to dashboard if user doesn't have required role
-    router.navigate([`/${user.role.toLowerCase()}/dashboard`]);
+    //router.navigate([`/${user.role.toLowerCase()}/dashboard`]);
     return false;
   };
 }; 
