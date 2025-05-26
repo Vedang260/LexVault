@@ -1,7 +1,7 @@
 <aside class="bg-surface text-textPrimary w-64 fixed top-0 left-0 h-full shadow-lg z-40 pt-16">
   <div class="p-4 border-b border-gray-200">
     <h2 class="text-2xl font-bold text-primary">LexVault</h2>
-    <p class="text-sm text-textSecondary">{{ getRoleDisplayName() }}</p>
+    <p class="text-sm text-textSecondary">{{ role }}</p>
     <p class="text-sm font-medium mt-1">{{ username }}</p>
   </div>
   
@@ -19,7 +19,7 @@
   </nav>
   
   <div class="absolute bottom-0 w-full p-4 border-t border-gray-200">
-    <a href="#" class="flex items-center text-sm font-medium text-textPrimary hover:text-accent">
+    <a (click)="logout()"class="flex items-center text-sm font-medium text-textPrimary hover:text-accent">
       <fa-icon [icon]="faSignOutAlt" class="mr-3"></fa-icon>
       Logout
     </a>
