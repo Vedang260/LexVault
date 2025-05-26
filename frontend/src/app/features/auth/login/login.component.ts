@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { faEnvelope, faLock, faScaleBalanced } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AuthService } from '../../../core/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,7 @@ export class LoginComponent {
   faLock = faLock;
   faScaleBalanced = faScaleBalanced;
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService, private toastr: ToastrService) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -35,8 +37,24 @@ export class LoginComponent {
       return;
     }
 
-    // Here you would typically call your authentication service
-    console.log('Login submitted', this.loginForm.value);
-    this.router.navigate(['/dashboard']);
+    const credentials = this.loginForm.value;
+
+    this.authService.login(credentials).subscribe({
+      next: (response) => {
+        if (response.success) {
+          // this.router.navigate(['/dashboard']);
+          this.toastr.success(response.message);
+          console.log(response.message);
+        } else {
+          // this.errorMessage = response.message;
+          this.toastr.error(response.message);
+          console.log(response.message);
+        }
+      },
+      error: (err) => {
+        // this.errorMessage = err.error?.message || 'Login failed. Please try again.';
+        this.toastr.error(err.message);
+      }
+    });
   }
 }
