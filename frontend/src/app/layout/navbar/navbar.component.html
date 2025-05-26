@@ -1,0 +1,39 @@
+<nav class="bg-primary text-white shadow-md fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Title -->
+      <div class="flex-shrink-0 flex items-center">
+        <h1 class="text-xl font-bold">{{ title }}</h1>
+      </div>
+      
+      <!-- Notification Icon -->
+      <div class="ml-4 relative">
+        <button (click)="toggleNotifications()" class="p-1 rounded-full text-white hover:text-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white relative">
+          <fa-icon [icon]="faBell" class="h-6 w-6"></fa-icon>
+          <span *ngIf="unreadCount > 0" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-accent rounded-full">
+            {{ unreadCount }}
+          </span>
+        </button>
+        
+        <!-- Notification Dropdown -->
+        <div *ngIf="showNotifications" class="origin-top-right absolute right-0 mt-2 w-80 rounded-md shadow-lg bg-white text-black ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div class="py-1">
+            <div class="px-4 py-2 border-b border-gray-200">
+              <h3 class="text-lg font-medium text-textPrimary">Notifications</h3>
+            </div>
+            <div *ngFor="let notification of notifications" 
+                 (click)="markAsRead(notification.id)"
+                 class="px-4 py-3 hover:bg-surface cursor-pointer"
+                 [class.bg-surface]="!notification.read">
+              <p class="text-sm text-textPrimary">{{ notification.message }}</p>
+              <p class="text-xs text-textSecondary">{{ notification.time }}</p>
+            </div>
+            <div *ngIf="notifications.length === 0" class="px-4 py-3">
+              <p class="text-sm text-textSecondary">No notifications</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

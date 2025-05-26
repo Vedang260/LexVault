@@ -3,8 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles */
 body {
-  @apply bg-background text-textPrimary;
-  font-family: 'Inter', sans-serif; /* Professional font */
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #FAF8F6; /* background color from your theme */
+}
+
+/* Ensure content doesn't hide behind fixed navbar/sidebar */
+main {
+  min-height: calc(100vh - 4rem); /* Adjust based on your footer height */
+  padding-bottom: 4rem; /* Footer height */
 }
