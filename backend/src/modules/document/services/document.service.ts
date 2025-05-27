@@ -1,30 +1,46 @@
 import { Injectable } from "@nestjs/common";
 import { DocumentRepository } from "../repositories/document.repository";
 import { CreateDocumentDto } from "../dtos/createDocument.dto";
+import { TagRepository } from "src/modules/tags/repositories/tag.repository";
 
 @Injectable()
 export class DocumentService{
     constructor(
-        private readonly documentRepository: DocumentRepository
+        private readonly documentRepository: DocumentRepository,
+        private readonly tagRepository: TagRepository
     ){}
 
     async createDocument(userId: string, documentDto: Partial<CreateDocumentDto>){
         try{
-            const newDocumentDto : Partial<CreateDocumentDto> = {
-                ...documentDto,
-                userId: userId
-            }
-            const newDocument = await this.documentRepository.createNewDocument(newDocumentDto);
-            if(newDocument){
-                return{
-                    success: true,
-                    message: 'New Document is created successfully'
+            if(documentDto?.tagIds){
+                const tags = await this.tagRepository.getTagsFromId(documentDto?.tagIds);
+                if(tags?.length){
+                    const newDocumentDto : Partial<CreateDocumentDto> = {
+                        ...documentDto,
+                        userId: userId
+                    }
+                    const newDocument = await this.documentRepository.createNewDocument(tags, newDocumentDto);
+                    if(newDocument){
+                        return{
+                            success: true,
+                            message: 'New Document is created successfully'
+                        }
+                    }
+                    return{
+                        success: false,
+                        message: 'Failed to create a new Document'
+                    }
+                }
+                return {
+                    success: false,
+                    message: 'Tags are not valid'
                 }
             }
             return{
                 success: false,
-                message: 'Failed to create a new Document'
+                message: 'Tags are not present in the document'
             }
+            
         }catch(error){
             console.error('Failed to create a new Document: ', error.message);
             return{

@@ -36,7 +36,7 @@ export class DocumentController{
 
     @Get(':id')
     @UseGuards(RolesGuard)
-    @Roles(UserRole.ADMIN, UserRole.CLIENT, UserRole.LAWYER)
+    @Roles(UserRole.ADMIN, UserRole.LAWYER)
     async getAllDocumnetsRealtedToCase(@Param('id') caseId: string){
         return await this.documentService.getCaseRelatedDocuments(caseId);
     }

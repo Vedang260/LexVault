@@ -3,18 +3,32 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { FindOptionsOrder, Repository } from "typeorm";
 import { CreateDocumentDto } from "../dtos/createDocument.dto";
 import { Document } from "../entities/document.entity";
+import { DataSource } from 'typeorm';
+import { Tag } from "src/modules/tags/entities/tag.entity";
 
 @Injectable()
 export class DocumentRepository{
     constructor(
         @InjectRepository(Document)
-        private readonly documentRepository: Repository<Document>
+        private readonly documentRepository: Repository<Document>,
+        private dataSource: DataSource
     ){}
 
-    async createNewDocument(createDocumentDto: Partial<CreateDocumentDto>): Promise<Document>{
+    async createNewDocument(tags: Tag[], createDocumentDto: Partial<CreateDocumentDto>): Promise<Document>{
         try{
             const newDocument = this.documentRepository.create(createDocumentDto);
-            return await this.documentRepository.save(newDocument);
+            const document = await this.documentRepository.save(newDocument);
+
+            await this.dataSource
+                .createQueryBuilder()
+                .insert()
+                .into('document_tags')
+                .values(tags.map((tag: Tag) => ({
+                    documentId: document.documentId,
+                    tagId: tag.tagId,
+                })))
+                .execute();
+            return document;
         }catch(error){
             console.error('Error in creating a new Document: ', error.message);
             throw new InternalServerErrorException('Error in creating a new Document');
@@ -34,7 +48,8 @@ export class DocumentRepository{
     async getCaseRelatedDocuments(caseId: string): Promise<Document[]>{
         try{
             return await this.documentRepository.find({
-                where: {caseId}
+                where: {caseId},
+                relations: ['tags'],
             });
         }catch(error){
             console.error('Error in fetching case related documents: ', error.message);
@@ -45,7 +60,8 @@ export class DocumentRepository{
     async getDocumentsOfClient(userId: string, caseId: string){
         try{
             return await this.documentRepository.find({
-                where: { userId, caseId }
+                where: { userId, caseId },
+                relations: ['tags']
             });
         }catch(error){
             console.error('Error in fetching case related documents: ', error.message);

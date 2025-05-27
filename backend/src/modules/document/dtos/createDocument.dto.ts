@@ -28,4 +28,7 @@ export class CreateDocumentDto{
 
     @IsOptional()
     isConfidential: boolean; 
+
+    @IsNotEmpty()
+    tagIds: string[];
 }

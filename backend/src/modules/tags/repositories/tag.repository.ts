@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Tag } from "../entities/tag.entity";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { CreateTagDto } from "../dtos/createTag.dto";
 import { UpdateTagDto } from "../dtos/updateTag.dto";
 
@@ -48,6 +48,17 @@ export class TagRepository{
         }catch(error){
             console.error('Error in deleting a Tag: ', error.message);
             throw new InternalServerErrorException('Error in deleting a Tag');
+        }
+    }
+
+    async getTagsFromId(tagIds: string[]){
+        try{
+            return await this.tagRepository.findBy({
+                tagId: In(tagIds)
+            })
+        }catch(error){
+            console.error('Error in fetching tags from Tag Ids: ', error.message);
+            throw new InternalServerErrorException('Error in fetching tags from Tag Ids');
         }
     }
 }
