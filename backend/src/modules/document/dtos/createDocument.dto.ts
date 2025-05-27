@@ -1,9 +1,10 @@
 import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { DocumentType } from "src/common/enums/documentType.enums";
 
 export class CreateDocumentDto{
 
     @IsNotEmpty()
-    type: DocumentType;
+    documentType: DocumentType;
 
     @IsNotEmpty()
     @IsString()

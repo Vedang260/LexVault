@@ -14,7 +14,7 @@ export class Document{
         type: 'enum',
         enum: DocumentType,
     })
-    type: DocumentType;
+    documentType: DocumentType;
 
     @Column()
     documentUrl: string;

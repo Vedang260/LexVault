@@ -11,6 +11,7 @@ import { CaseModule } from './modules/case/modules/case.module';
 import { TagModule } from './modules/tags/modules/tag.module';
 import { NoteModule } from './modules/note/modules/note.module';
 import { EventModule } from './modules/event/modules/event.module';
+import { DocumentModule } from './modules/document/modules/document.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { EventModule } from './modules/event/modules/event.module';
     TagModule,
     NoteModule,
     EventModule,
+    DocumentModule,
     UploadModule
   ],
 
@@ -40,6 +42,7 @@ export class AppModule {
       { path: 'lawyer', method: RequestMethod.ALL },
       { path: 'case', method: RequestMethod.ALL },
       { path: 'tags', method: RequestMethod.ALL },
+      { path: 'documents', method: RequestMethod.ALL }
     );
   }
 }
