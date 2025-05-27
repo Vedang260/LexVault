@@ -17,3 +17,7 @@ export interface CreateNoteResponse{
 export interface DeleteNoteResponse extends CreateNoteResponse{}
 
 export interface UpdateNoteResponse extends CreateNoteResponse{}
+
+export interface GetAllNotes extends CreateNoteResponse{
+    notes: Note[] | []
+}
