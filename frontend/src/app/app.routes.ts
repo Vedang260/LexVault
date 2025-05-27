@@ -14,6 +14,14 @@ export const routes: Routes = [
                 path: 'addCase',
                 loadComponent: () => import('./features/client/add-case/add-case.component').then(m => m.AddCaseComponent)
             }]
-        }]
+        },{
+            path: 'lawyer',
+            canActivate: [RoleGuard([Role.LAWYER])],
+            children: [{
+                path: 'cases-dashboard',
+                loadComponent: () => import('./features/lawyer/cases-dashboard/cases-dashboard.component').then(m => m.CasesDashboardComponent)
+            }]
+        }],
+        
     }
 ];

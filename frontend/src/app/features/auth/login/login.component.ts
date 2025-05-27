@@ -46,7 +46,10 @@ export class LoginComponent {
           // this.router.navigate(['/dashboard']);
           this.toastr.success(response.message);
           console.log(response.message);
-          this.router.navigate(['/client/addCase']);
+          if(response.user.role === 'CLIENT')
+            this.router.navigate(['/client/addCase']);
+          else if(response.user.role === 'LAWYER')
+            this.router.navigate(['/lawyer/cases-dashboard']);
         } else {
           // this.errorMessage = response.message;
           this.toastr.error(response.message);

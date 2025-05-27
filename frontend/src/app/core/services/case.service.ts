@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environment/environment';
-import { CreateCase, CreateCaseResponse } from '../models/case.model';
+import { CreateCase, CreateCaseResponse, GetAssignedCasesOfLawyerResponse } from '../models/case.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,10 @@ export class CaseService {
 
     createCase(data: CreateCase): Observable<CreateCaseResponse> {
         return this.http.post<CreateCaseResponse>(`${this.apiUrl}/api/case/create`, { createCase: data }, { headers: this.headers });
+    }
+
+    getAssignedCasesOfLawyerDashboard(): Observable<GetAssignedCasesOfLawyerResponse>{
+      return this.http.get<GetAssignedCasesOfLawyerResponse>(`${this.apiUrl}/api/case/lawyer/assigned`, { headers: this.headers })
     }
 
 

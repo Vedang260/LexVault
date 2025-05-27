@@ -1,0 +1,237 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">My Assigned Cases</h1>
+    <div class="mt-4 md:mt-0">
+      <button class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+        <fa-icon [icon]="faPlus" class="mr-2"></fa-icon> Add New Case
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <!-- Search Bar -->
+      <div class="relative md:col-span-2">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <fa-icon [icon]="faSearch" class="text-gray-500"></fa-icon>
+        </div>
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          (ngModelChange)="applyFilters()"
+          class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 placeholder-gray-400"
+          placeholder="Search by title or case number...">
+      </div>
+
+      <!-- Status Filter -->
+      <div>
+        <div class="relative">
+          <fa-icon [icon]="faFilter" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></fa-icon>
+          <select 
+            [(ngModel)]="selectedStatus" 
+            (change)="applyFilters()"
+            class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 appearance-none bg-white">
+            <option *ngFor="let option of statusOptions" [value]="option.value">{{option.label}}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Filter -->
+      <div>
+        <div class="relative">
+          <fa-icon [icon]="faFolder" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></fa-icon>
+          <select 
+            [(ngModel)]="selectedCategory" 
+            (change)="applyFilters()"
+            class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 appearance-none bg-white">
+            <option *ngFor="let option of categoryOptions" [value]="option.value">{{option.label}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+      <!-- Priority Filter -->
+      <div>
+        <div class="relative">
+          <fa-icon [icon]="faExclamationCircle" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></fa-icon>
+          <select 
+            [(ngModel)]="selectedPriority" 
+            (change)="applyFilters()"
+            class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 appearance-none bg-white">
+            <option *ngFor="let option of priorityOptions" [value]="option.value">{{option.label}}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Reset Button -->
+      <div>
+        <button 
+          (click)="resetFilters()"
+          class="flex items-center justify-center w-full px-4 py-2.5 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+          <fa-icon [icon]="faRedo" class="mr-2"></fa-icon> Reset Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+    <div class="animate-spin text-primary">
+      <fa-icon [icon]="faSpinner" size="2x"></fa-icon>
+    </div>
+  </div>
+
+  <!-- Cases Grid -->
+  <div *ngIf="!isLoading">
+    <!-- No Cases Found -->
+    <div *ngIf="filteredCases.length === 0" class="text-center py-12">
+      <fa-icon [icon]="faFileAlt" class="text-gray-400 text-5xl mb-4"></fa-icon>
+      <h3 class="text-xl font-medium text-gray-800">No cases found</h3>
+      <p class="text-gray-500 mt-2">Try adjusting your search or filters</p>
+    </div>
+
+    <!-- Cases List -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" @fadeIn>
+      <div *ngFor="let caseItem of filteredCases" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <!-- Case Header -->
+        <div class="p-6 bg-gradient-to-r from-amber-50 to-amber-200 border-b border-gray-200">
+          <div class="flex justify-between items-start">
+            <div class="flex items-center">
+              <fa-icon [icon]="getCategoryIcon(caseItem.category)" class="text-amber-700 mr-3 text-lg"></fa-icon>
+              <h3 class="text-lg font-semibold text-gray-800">{{ caseItem.title }}</h3>
+            </div>
+            <span class="px-3 py-1 text-center rounded-full text-xs font-semibold {{ getPriorityColor(caseItem.priority) }}">
+              {{ caseItem.priority | titlecase }} Priority
+            </span>
+          </div>
+        </div>
+
+        <!-- Case Details -->
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <p class="text-sm text-primary flex items-center">
+                <fa-icon [icon]="faHashtag" class="mr-1"></fa-icon> Case No:
+              </p>
+              <p class="font-medium text-gray-800">{{ caseItem.caseNumber }}</p>
+            </div>
+            <div class="flex items-center text-sm text-primary">
+                <fa-icon [icon]="faCircle" class="mr-1"></fa-icon>
+                <span class="mr-1">Status:</span>
+                <span class="px-2 py-1 rounded-full text-xs font-semibold {{ getStatusColor(caseItem.status) }}">
+                    {{ caseItem.status.replace('_', ' ') | titlecase }}
+                </span>
+            </div>
+
+          </div>
+
+        <div class="mb-4 flex items-center text-sm text-primary">
+  <fa-icon [icon]="faFolderOpen" class="mr-1"></fa-icon>
+  <span class="mr-1">Category:</span>
+  <span class="px-2 py-1 rounded-full text-xs font-semibold text-white bg-amber-700">
+    {{ caseItem.category | titlecase }}
+  </span>
+</div>
+
+
+
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <p class="text-sm text-primary flex items-center">
+                <fa-icon [icon]="faGavel" class="mr-1"></fa-icon> Court:
+              </p>
+              <p class="font-medium text-gray-800">{{ caseItem.courtName }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-primary flex items-center">
+                <fa-icon [icon]="faFile" class="mr-1"></fa-icon> Court Case No:
+              </p>
+              <p class="font-medium text-gray-800">{{ caseItem.courtCaseNumber }}</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <p class="text-sm text-primary flex items-center">
+                <fa-icon [icon]="faCalendar" class="mr-1"></fa-icon> Opened:
+              </p>
+              <p class="font-medium text-gray-800">{{ formatDate(caseItem.openedDate) }}</p>
+            </div>
+            <div *ngIf="caseItem.expectedResolutionDate">
+              <p class="text-sm text-primary flex items-center">
+                <fa-icon [icon]="faCalendarCheck" class="mr-1"></fa-icon> Resolution:
+              </p>
+              <p class="font-medium text-gray-800">{{ formatDate(caseItem.expectedResolutionDate) }}</p>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <p class="text-sm text-primary flex items-center">
+              <fa-icon [icon]="faInfoCircle" class="mr-1"></fa-icon> Description:
+            </p>
+            <p class="text-gray-700 line-clamp-2">{{ caseItem.description }}</p>
+          </div>
+
+          <div class="flex justify-center">
+            <a 
+              [routerLink]="['/cases', caseItem.caseId]" 
+              class="flex items-center px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-800 transition-colors duration-200">
+              <fa-icon [icon]="faEye" class="mr-2"></fa-icon> View Details
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Styles -->
+  <style>
+    /* Custom priority colors */
+    .priority-high {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+    .priority-medium {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+    .priority-low {
+      background-color: #d1fae5;
+      color: #059669;
+    }
+
+    /* Custom status colors */
+    .status-open {
+      background-color: #e0f2fe;
+      color: #2563eb;
+    }
+    .status-in_progress {
+      background-color: #fef3c7;
+      color: #d97706;
+    }
+    .status-closed {
+      background-color: #d1fae5;
+      color: #059669;
+    }
+
+    /* Custom select dropdown arrow */
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1.5em;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    [\@fadeIn] {
+      animation: fadeIn 0.3s ease-out;
+    }
+  </style>
+</div>

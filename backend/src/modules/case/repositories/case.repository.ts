@@ -158,6 +158,4 @@ export class CaseRepository{
             throw new InternalServerErrorException('Failed to fetch the assigned cases of Lawyers');
         }
     }
-
-
 }
