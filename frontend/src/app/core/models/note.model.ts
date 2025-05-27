@@ -1,8 +1,14 @@
-export interface Note{
-    noteId: string
+export interface UpdateNote{
     title: string
     content: string
+}
+
+export interface CreateNote extends UpdateNote{
     caseId: string
+}
+
+export interface Note extends CreateNote{
+    noteId: string
     userId: string
     createdAt: string
     updatedAt: string
