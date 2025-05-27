@@ -17,30 +17,28 @@ export class NoteController{
     @Post('/create')
     @UseGuards(RolesGuard)
     @Roles(UserRole.LAWYER)
-    async createNewTag(@Req() req: Request, @Body() body: {createNoteDto: CreateNoteDto}){
-        const { createNoteDto } =  body;
+    async createNewNote(@Req() req: Request, @Body() createNoteDto: CreateNoteDto){
         return await this.noteService.createNewNote(req['user'].userId, createNoteDto);
     }
 
     @Put(':id')
     @UseGuards(RolesGuard)
     @Roles(UserRole.LAWYER)
-    async updateNote(@Param('id') noteId: string, @Body() body: {updateNoteDto: Partial<UpdateNoteDto>}){
-        const { updateNoteDto } = body;
+    async updateNote(@Param('id') noteId: string, @Body() updateNoteDto: Partial<UpdateNoteDto>){
         return await this.noteService.updateNote(noteId, updateNoteDto);
     }
 
     @Delete(':id')
     @UseGuards(RolesGuard)
-    @Roles(UserRole.ADMIN)
-    async deleteTag(@Param('id') noteId: string){
+    @Roles(UserRole.ADMIN, UserRole.LAWYER)
+    async deleteNote(@Param('id') noteId: string){
         return await this.noteService.deleteNote(noteId);
     }
 
     @Get('/case/:id')
     @UseGuards(RolesGuard)
-    @Roles(UserRole.ADMIN, UserRole.CLIENT, UserRole.LAWYER)
-    async getAllTags(@Param('id') caseId: string){
+    @Roles(UserRole.ADMIN, UserRole.LAWYER)
+    async getAllNotes(@Param('id') caseId: string){
         return await this.noteService.getAllNotes(caseId);
     }
 }
