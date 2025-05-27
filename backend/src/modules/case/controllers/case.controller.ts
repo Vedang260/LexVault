@@ -31,6 +31,13 @@ export class CaseController{
         return await this.caseService.updateCaseStatus(caseId, updateCaseDto);
     }
 
+    @Get('/lawyer/assigned')
+    @UseGuards(RolesGuard)
+    @Roles(UserRole.LAWYER)
+    async getAssignedCasesofLawyerDashboard(@Req() req: Request){
+        return await this.caseService.getAssignedCaseOfLawyerDashboard(req['user'].userId);
+    }
+
     @Get('/request')
     @UseGuards(RolesGuard)
     @Roles(UserRole.ADMIN)

@@ -110,7 +110,7 @@ export class CaseRepository{
         }
     }
 
-     async getUnassignedCases() {
+    async getUnassignedCases() {
         try {
             return await this.caseRepository
             .createQueryBuilder('case')
@@ -130,4 +130,34 @@ export class CaseRepository{
             throw new InternalServerErrorException('Unable to fetch unassigned cases');
         }
     }
+
+    async getAssignedCasesOfLawyer(userId: string){
+        try{
+            return await this.caseRepository
+                .createQueryBuilder('case')
+                .leftJoin('case.lawyer', 'lawyer')
+                .leftJoin('lawyer.user', 'user')
+                .where('user.id = :userId', { userId })
+                .getMany();
+        }catch(error){
+            console.error('Error in fetching assigned cases of Lawyers: ', error.message);
+            throw new InternalServerErrorException('Failed to fetch the assigned cases of Lawyers');
+        }
+    }
+
+    async getAssignedCasesOfLawyerDashboard(userId: string) {
+        try {
+            return await this.caseRepository
+            .createQueryBuilder('case')
+            .leftJoin('case.assignedLawyers', 'lawyer')
+            .leftJoin('users', 'user', 'user.userId = lawyer.userId') // explicit join
+            .where('user.userId = :userId', { userId }) // updated condition
+            .getMany();
+        } catch (error) {
+            console.error('Error in fetching assigned cases of Lawyers: ', error.message);
+            throw new InternalServerErrorException('Failed to fetch the assigned cases of Lawyers');
+        }
+    }
+
+
 }

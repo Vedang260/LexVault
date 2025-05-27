@@ -96,4 +96,27 @@ export class CaseService{
             }
         }
     }
+
+    async getAssignedCaseOfLawyerDashboard(userId: string){
+        try{
+            const cases = await this.caseRepository.getAssignedCasesOfLawyerDashboard(userId);
+            if(cases){
+                return{
+                    success: true,
+                    message: 'Your cases are arrived successfully',
+                    cases: cases
+                }
+            }
+            return{
+                success: false,
+                message: 'Failed to fetch your assigned cases'
+            }
+        }catch(error){
+            console.error('Error in assigning case to the Lawyer: ', error.message);
+            return{
+                success: false,
+                message: 'Failed to fetch your assugned cases'
+            }
+        }
+    }
 }
