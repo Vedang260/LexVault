@@ -1,0 +1,60 @@
+<!-- case-details.component.html -->
+<div class="case-details-container">
+  <!-- Case Header -->
+  <div class="case-header">
+    <h1>{{ caseTitle }}</h1>
+    <div class="case-meta">
+      <span class="case-id">Case ID: {{ caseId }}</span>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <nav class="tabs-nav">
+    <ul>
+      <li *ngFor="let tab of tabs" 
+          [class.active]="activeTab === tab.id"
+          (click)="setActiveTab(tab.id)">
+        <fa-icon [icon]="icons[tab.id]" class="tab-icon"></fa-icon>
+        {{ tab.title }}
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Overview Tab -->
+    <div *ngIf="activeTab === 'overview'">
+      <app-case-overview [caseId]="caseId"></app-case-overview>
+    </div>
+
+    <!-- Client Info Tab -->
+    <!-- <div *ngIf="activeTab === 'client'">
+      <app-client-info [caseId]="caseId"></app-client-info>
+    </div> -->
+
+    <!-- Documents Tab -->
+    <!-- <div *ngIf="activeTab === 'documents'">
+      <app-documents [caseId]="caseId"></app-documents>
+    </div> -->
+
+    <!-- Notes Tab -->
+    <!-- <div *ngIf="activeTab === 'notes'">
+      <app-notes [caseId]="caseId"></app-notes>
+    </div> -->
+
+    <!-- Timeline & Hearing Tab -->
+    <!-- <div *ngIf="activeTab === 'timeline'">
+      <app-timeline [caseId]="caseId"></app-timeline>
+    </div> -->
+
+    <!-- Chat Tab -->
+    <!-- <div *ngIf="activeTab === 'chat'">
+      <app-case-chat [caseId]="caseId"></app-case-chat>
+    </div> -->
+
+    <!-- Invoice & Payments Tab -->
+    <!-- <div *ngIf="activeTab === 'invoice'">
+      <app-invoices [caseId]="caseId"></app-invoices>
+    </div> -->
+  </div>
+</div>

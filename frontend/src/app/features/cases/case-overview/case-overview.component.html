@@ -1,0 +1,118 @@
+<div class="overview-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading case details...</p>
+  </div>
+
+  <!-- Case Overview Content -->
+  <div *ngIf="!isLoading && caseDetails" class="case-overview-content">
+    <!-- Header with Edit Button -->
+    <div class="header-section">
+      <div class="title-section">
+        <fa-icon [icon]="faBalanceScale" class="title-icon"></fa-icon>
+        <h2>{{ caseDetails.title }}</h2>
+      </div>
+      <div class="action-buttons">
+        <button *ngIf="!isEditing" (click)="startEditing()" class="edit-button">
+          <fa-icon [icon]="faEdit"></fa-icon> Edit
+        </button>
+        <div *ngIf="isEditing" class="edit-actions">
+          <button (click)="saveChanges()" class="save-button">
+            <fa-icon [icon]="faSave"></fa-icon> Save
+          </button>
+          <button (click)="cancelEditing()" class="cancel-button">
+            <fa-icon [icon]="faTimes"></fa-icon> Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Badges -->
+    <div class="badge-section">
+      <span class="badge {{ getStatusColor(caseDetails.status) }}">
+        <fa-icon [icon]="getStatusIcon(caseDetails.status)"></fa-icon>
+        {{ caseDetails.status.replace('_', ' ') | titlecase }}
+      </span>
+      <span class="badge {{ getPriorityColor(caseDetails.priority) }}">
+        {{ caseDetails.priority | titlecase }} Priority
+      </span>
+      <span class="badge bg-gray-100 text-gray-800">
+        {{ caseDetails.category | titlecase }}
+      </span>
+    </div>
+
+    <!-- Case Details Grid -->
+    <div class="details-grid">
+      <!-- Left Column -->
+      <div class="details-column">
+        <!-- Case Information Card -->
+        <div class="detail-card">
+          <h3 class="card-title">Case Information</h3>
+          <div class="detail-item">
+            <label>Case Number</label>
+            <span *ngIf="!isEditing">{{ caseDetails.caseNumber }}</span>
+            <input *ngIf="isEditing" [(ngModel)]="editForm.caseNumber" type="text">
+          </div>
+          <div class="detail-item">
+            <label>Court Case Number</label>
+            <span *ngIf="!isEditing">{{ caseDetails.courtCaseNumber }}</span>
+            <input *ngIf="isEditing" [(ngModel)]="editForm.courtCaseNumber" type="text">
+          </div>
+          <div class="detail-item">
+            <label>Court Name</label>
+            <span *ngIf="!isEditing">{{ caseDetails.courtName }}</span>
+            <input *ngIf="isEditing" [(ngModel)]="editForm.courtName" type="text">
+          </div>
+        </div>
+
+        <!-- Dates Card -->
+        <div class="detail-card">
+          <h3 class="card-title">Dates</h3>
+          <div class="detail-item">
+            <label>Opened Date</label>
+            <span>{{ formatDate(caseDetails.openedDate) }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Expected Resolution</label>
+            <span *ngIf="!isEditing">{{ formatDate(caseDetails.expectedResolutionDate) }}</span>
+            <input *ngIf="isEditing" [(ngModel)]="editForm.expectedResolutionDate" type="date">
+          </div>
+          <div *ngIf="caseDetails.closedDate" class="detail-item">
+            <label>Closed Date</label>
+            <span>{{ formatDate(caseDetails.closedDate) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="details-column">
+        <!-- Description Card -->
+        <div class="detail-card description-card">
+          <h3 class="card-title">Case Description</h3>
+          <div class="detail-item">
+            <span *ngIf="!isEditing" class="description-text">{{ caseDetails.description }}</span>
+            <textarea *ngIf="isEditing" [(ngModel)]="editForm.description" rows="5"></textarea>
+          </div>
+        </div>
+
+        <!-- System Information Card -->
+        <div class="detail-card system-card">
+          <h3 class="card-title">System Information</h3>
+          <div class="detail-item">
+            <label>Created At</label>
+            <span>{{ formatDate(caseDetails.createdAt) }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Last Updated</label>
+            <span>{{ formatDate(caseDetails.updatedAt) }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Assigned</label>
+            <span>{{ caseDetails.assigned ? 'Yes' : 'No' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

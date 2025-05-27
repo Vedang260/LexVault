@@ -31,3 +31,9 @@ export interface GetAssignedCasesOfLawyerResponse{
     message: string
     cases?: Case[]
 }
+
+export interface GetCaseDetails{
+    success: boolean
+    message: string
+    caseDetails?: Case
+}

@@ -1,0 +1,56 @@
+/* case-details.component.css */
+.case-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.case-header {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.case-header h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.case-meta {
+  color: #666;
+  font-size: 14px;
+}
+
+.tabs-nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabs-nav li {
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.tabs-nav li:hover {
+  background-color: #f5f5f5;
+}
+
+.tabs-nav li.active {
+  border-bottom: 2px solid #5a3904;
+  color: #96671c;
+  font-weight: 500;
+}
+
+.tab-icon {
+  margin-right: 8px;
+}
+
+.tab-content {
+  padding: 20px 0;
+}

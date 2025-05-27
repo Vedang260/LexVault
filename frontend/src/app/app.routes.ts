@@ -21,6 +21,13 @@ export const routes: Routes = [
                 path: 'cases-dashboard',
                 loadComponent: () => import('./features/lawyer/cases-dashboard/cases-dashboard.component').then(m => m.CasesDashboardComponent)
             }]
+        }, {
+            path: 'cases',
+            canActivate: [RoleGuard([Role.ADMIN, Role.LAWYER])],
+            children: [{
+                path: `case-details/:caseId`,
+                loadComponent: () => import('./features/cases/case-details/case-details.component').then(m => m.CaseDetailsComponent) 
+            }]
         }],
         
     }
