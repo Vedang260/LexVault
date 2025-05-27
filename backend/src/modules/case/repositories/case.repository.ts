@@ -91,9 +91,11 @@ export class CaseRepository{
         }
     }
 
-    async getCaseDetails(){
+    async getCaseDetails(caseId: string){
         try{
-
+            return await this.caseRepository.findOne({
+                where: { caseId }
+            });
         }catch(error){
             console.error('Error in fetching the case details: ', error.message);
             throw new InternalServerErrorException('Error in fetching the case details: ', error.message);

@@ -119,4 +119,31 @@ export class CaseService{
             }
         }
     }
+
+    async getCaseDetails(caseId: string){
+        try{
+            const caseDetails = await this.caseRepository.getCaseDetails(caseId);
+            if(caseDetails){
+                return{
+                    success: true,
+                    message: 'Your case details are fetched',
+                    caseDetails: caseDetails
+                }
+            }
+        }catch(error){
+            console.error('Error in fetching the case details: ', error.message);
+            return{
+                success: false,
+                message: 'Failed to fetch case details'
+            }
+        }
+    }
+
+    async getClientInfo(){
+        try{
+
+        }catch(error){
+
+        }
+    }
 }
