@@ -6,11 +6,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faInfoCircle, faUser, faFileAlt, faStickyNote, faClock, faComments, faReceipt, faHome, faFileInvoice, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { CaseService } from '../../../core/services/case.service';
 import { CaseOverviewComponent } from '../case-overview/case-overview.component';
+import { NotesComponent } from '../notes/notes.component';
 
 @Component({
   selector: 'app-case-details',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, CaseOverviewComponent],
+  imports: [CommonModule, FontAwesomeModule, CaseOverviewComponent, NotesComponent],
   templateUrl: './case-details.component.html',
   styleUrls: ['./case-details.component.css']
 })

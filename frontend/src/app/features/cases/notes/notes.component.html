@@ -1,0 +1,144 @@
+<div class="notes-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading notes...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading" class="notes-layout">
+    <!-- Sidebar -->
+    <div class="notes-sidebar">
+      <div class="sidebar-header">
+        <h3>Notes</h3>
+        <button (click)="startCreating()" class="new-note-button">
+          <fa-icon [icon]="faPlus"></fa-icon> New Note
+        </button>
+      </div>
+
+      <div class="search-box">
+        <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+        <input 
+          [(ngModel)]="searchQuery" 
+          type="text" 
+          placeholder="Search notes..."
+          class="search-input">
+      </div>
+
+      <div class="notes-list">
+        <div 
+          *ngFor="let note of filteredNotes" 
+          (click)="selectNote(note)"
+          [class.active]="selectedNote?.noteId === note.noteId"
+          class="note-item">
+          <fa-icon [icon]="faStickyNote" class="note-icon"></fa-icon>
+          <div class="note-preview">
+            <h4 class="note-title">{{ note.title || 'Untitled Note' }}</h4>
+            <p class="note-excerpt">{{ note.content | slice:0:60 }}{{ note.content.length > 60 ? '...' : '' }}</p>
+            <span class="note-date">{{ formatDate(note.updatedAt) }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="filteredNotes.length === 0" class="empty-state">
+          <p>No notes found</p>
+          <button (click)="startCreating()" class="create-first-button">
+            Create your first note
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="notes-content">
+      <!-- Create/Edit Form -->
+      <div *ngIf="isCreating || isEditing" class="note-editor">
+        <div class="editor-header">
+          <h3>{{ isCreating ? 'Create New Note' : 'Edit Note' }}</h3>
+          <div class="editor-actions">
+            <button (click)="saveNote()" class="save-button">
+              <fa-icon [icon]="faSave"></fa-icon> Save
+            </button>
+            <button (click)="cancelEditing()" class="cancel-button">
+              <fa-icon [icon]="faTimes"></fa-icon> Cancel
+            </button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <input 
+            [(ngModel)]="editForm.title" 
+            type="text" 
+            placeholder="Note title"
+            class="title-input">
+        </div>
+        
+        <div class="form-group">
+          <textarea 
+            [(ngModel)]="editForm.content" 
+            placeholder="Write your note here..."
+            class="content-textarea"></textarea>
+        </div>
+      </div>
+
+      <!-- Note View -->
+      <div *ngIf="!isEditing && !isCreating && selectedNote" class="note-view">
+        <div class="note-view-header">
+          <h2>{{ selectedNote.title || 'Untitled Note' }}</h2>
+          <div class="note-actions">
+            <button (click)="startEditing()" class="edit-button">
+              <fa-icon [icon]="faEdit"></fa-icon> Edit
+            </button>
+            <button *ngIf="selectedNote?.noteId" (click)="openConfirmModal(selectedNote.noteId!)" class="delete-button">
+              <fa-icon [icon]="faTrash"></fa-icon> Delete
+            </button>
+          </div>
+        </div>
+        
+        <div class="note-meta">
+          <span>Created: {{ formatDate(selectedNote.createdAt) }}</span>
+          <span>Updated: {{ formatDate(selectedNote.updatedAt) }}</span>
+        </div>
+        
+        <div class="note-content">
+          <p>{{ selectedNote.content }}</p>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!isEditing && !isCreating && !selectedNote && notes.length === 0" class="empty-content">
+        <div class="empty-content-inner">
+          <fa-icon [icon]="faStickyNote" class="empty-icon"></fa-icon>
+          <h3>No Notes Yet</h3>
+          <p>Create your first note to get started</p>
+          <button (click)="startCreating()" class="create-button">
+            <fa-icon [icon]="faPlus"></fa-icon> Create Note
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty Selection State -->
+      <div *ngIf="!isEditing && !isCreating && !selectedNote && notes.length > 0" class="empty-selection">
+        <div class="empty-selection-inner">
+          <fa-icon [icon]="faStickyNote" class="empty-icon"></fa-icon>
+          <h3>Select a Note</h3>
+          <p>Choose a note from the sidebar or create a new one</p>
+          <button (click)="startCreating()" class="create-button">
+            <fa-icon [icon]="faPlus"></fa-icon> New Note
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- confirm-delete-modal.component.html -->
+<div class="modal-overlay" *ngIf="showConfirmModal">
+  <div class="modal-box">
+    <h3>⚠️ Confirm Deletion</h3>
+    <p>Are you sure you want to delete this note?</p>
+    <div class="modal-actions">
+      <button class="btn cancel" (click)="cancelDelete()">Cancel</button>
+      <button class="btn delete" (click)="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>

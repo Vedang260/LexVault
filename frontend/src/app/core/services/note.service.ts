@@ -18,7 +18,7 @@ export class NoteService {
         return this.http.post<CreateNoteResponse>(`${this.apiUrl}/api/notes/create`, data, { headers: this.headers });
     }
 
-    updateNote(noteId: string, data: UpdateNote): Observable<UpdateNoteResponse>{
+    updateNote(noteId: any, data: UpdateNote): Observable<UpdateNoteResponse>{
         return this.http.put<UpdateNoteResponse>(`${this.apiUrl}/api/notes/${noteId}`, data, { headers: this.headers });
     }
 
