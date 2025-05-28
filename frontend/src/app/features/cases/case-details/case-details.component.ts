@@ -7,11 +7,12 @@ import { faInfoCircle, faUser, faFileAlt, faStickyNote, faClock, faComments, faR
 import { CaseService } from '../../../core/services/case.service';
 import { CaseOverviewComponent } from '../case-overview/case-overview.component';
 import { NotesComponent } from '../notes/notes.component';
+import { EventsComponent } from '../events/events.component';
 
 @Component({
   selector: 'app-case-details',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, CaseOverviewComponent, NotesComponent],
+  imports: [CommonModule, FontAwesomeModule, CaseOverviewComponent, NotesComponent, EventsComponent],
   templateUrl: './case-details.component.html',
   styleUrls: ['./case-details.component.css']
 })

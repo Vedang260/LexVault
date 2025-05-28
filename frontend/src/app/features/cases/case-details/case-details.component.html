@@ -42,6 +42,11 @@
       <app-notes [caseId]="caseId"></app-notes>
     </div>
 
+    <!-- Notes Tab -->
+    <div *ngIf="activeTab === 'events'">
+      <app-events [caseId]="caseId"></app-events>
+    </div>
+
     <!-- Timeline & Hearing Tab -->
     <!-- <div *ngIf="activeTab === 'timeline'">
       <app-timeline [caseId]="caseId"></app-timeline>
