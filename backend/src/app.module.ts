@@ -43,7 +43,8 @@ export class AppModule {
       { path: 'case', method: RequestMethod.ALL },
       { path: 'tags', method: RequestMethod.ALL },
       { path: 'documents', method: RequestMethod.ALL },
-      { path: 'notes', method: RequestMethod.ALL }
+      { path: 'notes', method: RequestMethod.ALL },
+      { path: 'events', method: RequestMethod.ALL }
     );
   }
 }

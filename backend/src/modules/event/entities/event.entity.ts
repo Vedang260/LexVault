@@ -16,11 +16,11 @@ export class Event {
   @Column('text', { nullable: true })
   description: string;
 
-  @Column({ type: 'timestamp' })
-  start: Date;
+  @Column({ type: 'date' })
+  eventDate: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
-  end: Date;
+  @Column()
+  eventTime: string;
 
   @Column({
     type: 'enum',

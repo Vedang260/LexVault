@@ -3,15 +3,16 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateEventDto } from "../dtos/createEvent.dto";
 import { UpdateEventDto } from "../dtos/updateEvent.dto";
+import { Event as CaseEvent} from "../entities/event.entity";
 
 @Injectable()
 export class EventRepository{
     constructor(
-        @InjectRepository(Event)
-        private readonly eventRepository: Repository<Event>
+        @InjectRepository(CaseEvent)
+        private readonly eventRepository: Repository<CaseEvent>
     ){}
 
-    async createNewEvent(createEventDto: Partial<CreateEventDto>): Promise<Event|null>{
+    async createNewEvent(createEventDto: Partial<CreateEventDto>): Promise<CaseEvent|null>{
         try{
             const newEvent = this.eventRepository.create(createEventDto);
             return await this.eventRepository.save(newEvent);
@@ -25,7 +26,7 @@ export class EventRepository{
         try{
             const result = await this.eventRepository
                         .createQueryBuilder()
-                        .update(Event)
+                        .update(CaseEvent)
                         .set(updateEventDto)
                         .where("eventId = :eventId", { eventId })
                         .execute();
@@ -37,7 +38,7 @@ export class EventRepository{
         }
     }
 
-    async getAllEventsByCase(caseId: string): Promise<Event[]>{
+    async getAllEventsByCase(caseId: string): Promise<CaseEvent[]>{
         try{
             return await this.eventRepository
                         .createQueryBuilder("event")
@@ -59,20 +60,12 @@ export class EventRepository{
         }
     }
 
-    async getAllEvents(): Promise<Event[]>{
+    async getAllEvents(): Promise<CaseEvent[]>{
         try{
             return await this.eventRepository.find();
         }catch(error){
             console.error('Error in fetching all the events: ', error.message);
             throw new InternalServerErrorException('Error in fetching all the events');
-        }
-    }
-
-    async getEventsForClient(){
-        try{
-
-        }catch(error){
-            
         }
     }
 }

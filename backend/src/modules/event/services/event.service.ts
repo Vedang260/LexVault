@@ -3,6 +3,7 @@ import { CaseStatus } from "src/common/enums/caseStatus.enums";
 import { EventRepository } from "../repositories/event.repository";
 import { CreateEventDto } from "../dtos/createEvent.dto";
 import { UpdateEventDto } from "../dtos/updateEvent.dto";
+import { Event as CaseEvent} from "../entities/event.entity";
 
 @Injectable()
 export class EventService{
@@ -54,7 +55,7 @@ export class EventService{
         }
     }
 
-    async getAllEvents(): Promise<{success:boolean; message:string; events: Event[]|null}>{
+    async getAllEvents(): Promise<{success:boolean; message:string; events: CaseEvent[]|null}>{
         try{
             const events = await this.eventRepository.getAllEvents();
             return{
@@ -87,6 +88,24 @@ export class EventService{
             return{
                 success: false,
                 message: 'Failed to delete the event'
+            }
+        }
+    }
+
+    async getCaseEvents(caseId: string){
+        try{
+            const events = await this.eventRepository.getAllEventsByCase(caseId);
+            return{
+                success: true,
+                message: 'All events are fetched successfully',
+                events: events
+            }
+        }catch(error){
+            console.error('Error in fetching the case events: ', error.message);
+            return{
+                success: false,
+                message: 'Failed to fetch the case events',
+                events: []
             }
         }
     }

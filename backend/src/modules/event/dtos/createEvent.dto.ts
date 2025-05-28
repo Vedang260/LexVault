@@ -15,10 +15,10 @@ export class CreateEventDto{
     description: string;
 
     @IsNotEmpty()
-    start: Date;
+    eventDate: Date;
 
     @IsNotEmpty()
-    end: Date;
+    eventTime: string;
 
     @IsNotEmpty()
     type: EventType;

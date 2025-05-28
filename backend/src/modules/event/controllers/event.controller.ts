@@ -17,16 +17,14 @@ export class EventController{
     @Post('/create')
     @UseGuards(RolesGuard)
     @Roles(UserRole.ADMIN, UserRole.LAWYER)
-    async createNewEvent(@Body() body: {createEventDto: CreateEventDto}){
-        const { createEventDto } =  body;
+    async createNewEvent(@Body() createEventDto: CreateEventDto){
         return await this.eventService.createNewEvent(createEventDto);
     }
 
     @Put(':id')
     @UseGuards(RolesGuard)
     @Roles(UserRole.ADMIN, UserRole.LAWYER)
-    async updateEvent(@Param('id') eventId: string, @Body() body: {updateEventDto: UpdateEventDto}){
-        const { updateEventDto } = body;
+    async updateEvent(@Param('id') eventId: string, @Body() updateEventDto: UpdateEventDto){
         return await this.eventService.updateEvent(eventId, updateEventDto);
     }
 
@@ -35,6 +33,13 @@ export class EventController{
     @Roles(UserRole.ADMIN, UserRole.LAWYER)
     async deleteEvent(@Param('id') eventId: string){
         return await this.eventService.deleteEvent(eventId);
+    }
+
+    @Get('/case/:id')
+    @UseGuards(RolesGuard)
+    @Roles(UserRole.ADMIN)
+    async getAllEventsByCase(@Param('id') caseId: string){
+        return await this.eventService.getCaseEvents(caseId);
     }
 
     @Get()
