@@ -4,6 +4,7 @@ import { Lawyer } from "src/modules/lawyer/entities/lawyer.entity";
 import { Document } from "src/modules/document/entities/document.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Note } from "src/modules/note/entities/note.entity";
+import { TimeEntry } from "src/modules/time-entry/entities/timeEntry.entity";
 
 @Entity({ name: 'users' })
 export class User{
@@ -40,6 +41,9 @@ export class User{
     @OneToMany(() => Note, (note) => note.lawyer)
     notes: Note[];
     
+    @OneToMany(() => TimeEntry, (timeEntry) => timeEntry.lawyer)
+    timeEntries: TimeEntry[];
+
     @CreateDateColumn()
     createdAt: Date;
 

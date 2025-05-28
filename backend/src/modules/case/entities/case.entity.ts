@@ -7,6 +7,7 @@ import { Document } from  "src/modules/document/entities/document.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Note } from "src/modules/note/entities/note.entity";
 import { Event } from "src/modules/event/entities/event.entity";
+import { TimeEntry } from "src/modules/time-entry/entities/timeEntry.entity";
 
 @Entity({ name: 'cases' })
 export class Case{
@@ -64,6 +65,9 @@ export class Case{
     @OneToMany(() => Document, (document) => document.case)
     documents: Document[];
 
+    @OneToMany(() => TimeEntry, (timeEntry) => timeEntry.case)
+    timeEntries: TimeEntry[];
+    
     @ManyToOne(() => User, (user) => user.casesAsClient)
     @JoinColumn({ name: 'clientId' })
     client: User;
