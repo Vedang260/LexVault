@@ -5,6 +5,7 @@ import { Document } from "src/modules/document/entities/document.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Note } from "src/modules/note/entities/note.entity";
 import { TimeEntry } from "src/modules/time-entry/entities/timeEntry.entity";
+import { Message } from "src/modules/chat/entities/message.entity";
 
 @Entity({ name: 'users' })
 export class User{
@@ -43,6 +44,9 @@ export class User{
     
     @OneToMany(() => TimeEntry, (timeEntry) => timeEntry.lawyer)
     timeEntries: TimeEntry[];
+
+    @OneToMany(() => Message, (message) => message.user)
+    messages: Message[];
 
     @CreateDateColumn()
     createdAt: Date;
