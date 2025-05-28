@@ -13,6 +13,7 @@ import { NoteModule } from './modules/note/modules/note.module';
 import { EventModule } from './modules/event/modules/event.module';
 import { DocumentModule } from './modules/document/modules/document.module';
 import { ChatModule } from './modules/chat/modules/chat.module';
+import { TimeEntryModule } from './modules/time-entry/modules/timeEntry.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ChatModule } from './modules/chat/modules/chat.module';
     EventModule,
     DocumentModule,
     ChatModule,
+    TimeEntryModule,
     UploadModule
   ],
 
@@ -47,7 +49,8 @@ export class AppModule {
       { path: 'documents', method: RequestMethod.ALL },
       { path: 'notes', method: RequestMethod.ALL },
       { path: 'events', method: RequestMethod.ALL },
-      { path: 'chats', method: RequestMethod.ALL }
+      { path: 'chats', method: RequestMethod.ALL },
+      { path: 'time-entry', method: RequestMethod.ALL }
     );
   }
 }
