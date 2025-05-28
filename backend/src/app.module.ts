@@ -12,6 +12,7 @@ import { TagModule } from './modules/tags/modules/tag.module';
 import { NoteModule } from './modules/note/modules/note.module';
 import { EventModule } from './modules/event/modules/event.module';
 import { DocumentModule } from './modules/document/modules/document.module';
+import { ChatModule } from './modules/chat/modules/chat.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { DocumentModule } from './modules/document/modules/document.module';
     NoteModule,
     EventModule,
     DocumentModule,
+    ChatModule,
     UploadModule
   ],
 
@@ -44,7 +46,8 @@ export class AppModule {
       { path: 'tags', method: RequestMethod.ALL },
       { path: 'documents', method: RequestMethod.ALL },
       { path: 'notes', method: RequestMethod.ALL },
-      { path: 'events', method: RequestMethod.ALL }
+      { path: 'events', method: RequestMethod.ALL },
+      { path: 'chats', method: RequestMethod.ALL }
     );
   }
 }

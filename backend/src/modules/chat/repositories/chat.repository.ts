@@ -39,7 +39,19 @@ export class ChatRepository{
         try{
             return await this.messageRepository.find({
                 where: { chatRoomId },
-                relations: [ 'user' ]
+                relations: [ 'user' ],
+                select:{
+                    messageId: true,
+                    chatRoomId: true,
+                    senderId: true,
+                    content: true,
+                    user: {
+                        firstName: true,
+                        lastName: true,
+                        role: true,
+                    },
+                    createdAt: true
+                }
             }); 
         }catch(error){
             console.error('Error in fetching all the Chat Messages: ', error.message);
@@ -47,12 +59,14 @@ export class ChatRepository{
         }
     }
 
-    // async getChatRoom(caseId: string){
-    //     try{
-    //         return await this.
-    //     }catch(error){
-    //         console.error('Error in fetching the chat Room: ', error.message);
-    //         throw new InternalServerErrorException('Error in fetching the chat Room');
-    //     }
-    // }
+    async getChatRoom(caseId: string){
+        try{
+            return await this.chatRepository.find({
+                where: { caseId }
+            });
+        }catch(error){
+            console.error('Error in fetching the chat Room: ', error.message);
+            throw new InternalServerErrorException('Error in fetching the chat Room');
+        }
+    }
 }
