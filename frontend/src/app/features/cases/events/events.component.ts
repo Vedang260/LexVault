@@ -19,25 +19,9 @@ import { CalendarOptions, EventInput, DateSelectArg, EventClickArg } from '@full
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-
-enum EventType {
-  HEARING = 'hearing',
-  MEETING = 'meeting',
-  DEADLINE = 'deadline',
-  TRIAL = 'trial',
-  DEPOSITION = 'deposition',
-  FILING = 'filing',
-}
-
-interface Event {
-  eventId: string;
-  caseId: string;
-  title: string;
-  description: string;
-  eventDate: string;
-  eventTime: string;
-  type: EventType;
-}
+import { EventType } from '../../../core/constants/event.enum';
+import { Event } from '../../../core/models/event.model';
+import { EventsService } from '../../../core/services/events.service';
 
 @Component({
   selector: 'app-events',
@@ -105,7 +89,7 @@ export class EventsComponent implements OnInit {
     eventDidMount: this.eventDidMount.bind(this)
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private eventService: EventsService) {}
 
   ngOnInit(): void {
     this.fetchEvents();
@@ -113,12 +97,13 @@ export class EventsComponent implements OnInit {
 
   fetchEvents(): void {
     this.isLoading = true;
-    this.http.get<{success: boolean, events: Event[]}>(`https://api.yourdomain.com/cases/${this.caseId}/events`)
-      .subscribe({
+    this.eventService.getAllCaseEvents(this.caseId).subscribe({
         next: (response) => {
-          if (response.success) {
-            this.events = response.events;
+          if (response?.success) {
+            this.events = response?.events;
             this.filteredEvents = [...this.events];
+            
+            this.isLoading = false;
             this.updateCalendarEvents();
           }
           this.isLoading = false;
@@ -127,7 +112,7 @@ export class EventsComponent implements OnInit {
           console.error('Error fetching events:', error);
           this.isLoading = false;
         }
-      });
+    });
   }
 
   updateCalendarEvents(): void {
@@ -144,8 +129,8 @@ export class EventsComponent implements OnInit {
       borderColor: this.getEventColor(event.type)
     }));
 
-    this.calendarOptions.events = this.calendarEvents;
-    const calendarApi = this.calendarComponent.getApi();
+    this.calendarOptions.events = this?.calendarEvents;
+    const calendarApi = this?.calendarComponent.getApi();
     calendarApi.removeAllEvents();
     calendarApi.addEventSource(this.calendarEvents);
   }
@@ -157,7 +142,7 @@ export class EventsComponent implements OnInit {
       case EventType.DEADLINE: return '#ff9800'; // Orange
       case EventType.TRIAL: return '#f44336'; // Red
       case EventType.DEPOSITION: return '#9c27b0'; // Purple
-      case EventType.FILING: return '#607d8b'; // Gray
+      case EventType.FILING: return '#dce1e3'; // Gray
       default: return '#2196f3'; // Default blue
     }
   }
@@ -183,7 +168,8 @@ export class EventsComponent implements OnInit {
     return {
       html: `
         <div class="fc-event-content">
-          <div class="event-type-badge" style="background-color: ${this.getEventColor(type)}"></div>
+          <div class="event-type-badge" style="background-color: ${this.getEventColor(type)}" ></div>
+          <div class="event-type" style="">${type.toUpperCase()}</div>
           <div class="event-title">${arg.event.title}</div>
           <div class="event-time">${time}</div>
         </div>
@@ -296,9 +282,7 @@ export class EventsComponent implements OnInit {
   deleteEvent(eventId: string): void {
     if (confirm('Are you sure you want to delete this event?')) {
       this.isLoading = true;
-      this.http.delete<{success: boolean}>(
-        `https://api.yourdomain.com/cases/${this.caseId}/events/${eventId}`
-      ).subscribe({
+      this.eventService.deleteEvent(eventId).subscribe({
         next: (response) => {
           if (response.success) {
             this.events = this.events.filter(e => e.eventId !== eventId);

@@ -37,7 +37,7 @@ export class EventController{
 
     @Get('/case/:id')
     @UseGuards(RolesGuard)
-    @Roles(UserRole.ADMIN)
+    @Roles(UserRole.ADMIN, UserRole.LAWYER)
     async getAllEventsByCase(@Param('id') caseId: string){
         return await this.eventService.getCaseEvents(caseId);
     }

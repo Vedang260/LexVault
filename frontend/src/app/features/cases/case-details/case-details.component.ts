@@ -38,7 +38,7 @@ export class CaseDetailsComponent implements OnInit {
     { id: 'client', title: 'Client Info' },
     { id: 'documents', title: 'Documents' },
     { id: 'notes', title: 'Notes' },
-    { id: 'timeline', title: 'Timeline & Hearing' },
+    { id: 'events', title: 'Timeline & Hearing' },
     { id: 'chat', title: 'Chat' },
     { id: 'invoice', title: 'Invoice & Payments' }
   ];
