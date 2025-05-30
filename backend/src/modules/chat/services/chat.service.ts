@@ -63,7 +63,8 @@ export class ChatService{
             const chatRoom = await this.chatRepository.getChatRoom(caseId);
             return {
                 success: true,
-                message: 'Chat room is fetched successfully'
+                message: 'Chat room is fetched successfully',
+                chatRoom: chatRoom
             }
         }catch(error){
             console.error('Error in fetching a chat Room');

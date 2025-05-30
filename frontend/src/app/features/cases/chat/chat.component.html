@@ -1,0 +1,113 @@
+<div class="chat-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading chat...</p>
+  </div>
+
+  <!-- Main Chat Interface -->
+  <div *ngIf="!isLoading" class="chat-layout">
+    <!-- Sidebar -->
+    <div class="chat-sidebar">
+      <div class="sidebar-header">
+        <fa-icon [icon]="faComments" class="header-icon"></fa-icon>
+        <h3>Chats</h3>
+      </div>
+
+      <div class="chat-rooms">
+        <div 
+          *ngFor="let room of chatRooms"
+          (click)="selectRoom(room)"
+          [class.active]="selectedRoom?.chatRoomId === room.chatRoomId"
+          class="chat-room">
+          <div class="room-avatar">
+            <fa-icon [icon]="faUser"></fa-icon>
+          </div>
+          <div class="room-info">
+            <h4>{{ room.otherMember?.firstName }} {{ room.otherMember?.lastName }}</h4>
+            <p>{{ room.otherMember?.role | titlecase }}</p>
+          </div>
+          <div class="room-meta">
+            <span>{{ formatDate(room.createdAt) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area">
+      <!-- Room Header -->
+      <div *ngIf="selectedRoom" class="chat-header">
+        <div class="header-user">
+          <div class="user-avatar">
+            <fa-icon [icon]="faUser"></fa-icon>
+          </div>
+          <div class="user-info">
+            <h3>{{ selectedRoom.otherMember?.firstName }} {{ selectedRoom.otherMember?.lastName }}</h3>
+            <p>{{ selectedRoom.otherMember?.role | titlecase }}</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="action-button">
+            <fa-icon [icon]="faEllipsisVertical"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Container -->
+      <div *ngIf="selectedRoom" class="messages-container">
+        <!-- Loading State -->
+        <div *ngIf="isRoomLoading" class="room-loading">
+          <div class="spinner"></div>
+        </div>
+
+        <!-- Messages -->
+        <div *ngIf="!isRoomLoading" class="messages">
+          <div *ngFor="let message of messages; let i = index" 
+               [class.current-user]="message.isCurrentUser"
+               class="message">
+            <!-- Show date separator if needed -->
+            <div *ngIf="i === 0 || !isSameDay(messages[i-1].createdAt, message.createdAt)" 
+                 class="date-separator">
+              <span>{{ formatDate(message.createdAt) }}</span>
+            </div>
+
+            <div class="message-content">
+              <div class="message-bubble">
+                <p>{{ message.content }}</p>
+                <div class="message-time">
+                  <fa-icon [icon]="faClock"></fa-icon>
+                  <span>{{ formatTime(message.createdAt) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Input -->
+      <div *ngIf="selectedRoom" class="message-input">
+        <form (submit)="sendMessage(); $event.preventDefault()">
+          <input 
+            [(ngModel)]="newMessage" 
+            name="newMessage"
+            type="text" 
+            placeholder="Type a message..."
+            class="input-field">
+          <button type="submit" class="send-button">
+            <fa-icon [icon]="faPaperPlane"></fa-icon>
+          </button>
+        </form>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!selectedRoom && chatRooms.length === 0" class="empty-state">
+        <div class="empty-content">
+          <fa-icon [icon]="faComments" class="empty-icon"></fa-icon>
+          <h3>No Chats Yet</h3>
+          <p>Start a conversation with your case members</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
