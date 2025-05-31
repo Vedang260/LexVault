@@ -1,8 +1,9 @@
 import {
   WebSocketGateway, SubscribeMessage, MessageBody, ConnectedSocket,
   OnGatewayConnection, OnGatewayDisconnect,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { ChatService } from '../services/chat.service';
 import { CreateMessageDto } from '../dtos/createMessage.dto';
 import { UseGuards } from '@nestjs/common';
@@ -11,6 +12,10 @@ import { WsJwtGuard } from '../guards/ws_jwt.guard';
 @WebSocketGateway({ cors: true })
 @UseGuards(WsJwtGuard)
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  
+  @WebSocketServer()
+  server: Server;
+
   constructor(private chatService: ChatService) {}
 
   handleConnection(client: Socket) {
@@ -32,7 +37,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const result = await this.chatService.createMessage(dto, senderId);
 
     if(result?.success){
-        client.broadcast.emit(`newMessage-${dto.chatRoomId}`, result.message);
+      console.log('Message is emitted: ', result.message);
+        this.server.emit(`newMessage-${dto.chatRoomId}`, result.message);
         return result.message;
     }
     return "";

@@ -53,6 +53,10 @@ export class AuthService {
         return this.tokenSubject.value;
     }
 
+    getCurrentUserId(){
+        return this.currentUserValue?.id;
+    }
+
     login(credentials: { email: string; password: string }): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/api/auth/login`, credentials).pipe(
         tap(response => {

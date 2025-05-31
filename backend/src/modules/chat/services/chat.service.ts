@@ -30,7 +30,7 @@ export class ChatService{
             const newMessage = await this.chatRepository.createMessage(senderId, createMessageDto);
             return{
                 success: true,
-                message: newMessage.content
+                message: newMessage
             }
         }catch(error){
             console.error('Error in creating a new Message');

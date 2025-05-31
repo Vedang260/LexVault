@@ -11,35 +11,10 @@ import {
   faClock
 } from '@fortawesome/free-solid-svg-icons';
 import { Socket, io } from 'socket.io-client';
-import { environment } from '../../environments/environment';
-import { AuthService } from '../../services/auth.service';
-
-interface ChatRoom {
-  chatRoomId: string;
-  caseId: string;
-  memberIds: string[];
-  createdAt: string;
-  otherMember?: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    role: string;
-  };
-}
-
-interface Message {
-  messageId: string;
-  chatRoomId: string;
-  content: string;
-  senderId: string;
-  user: {
-    firstName: string;
-    lastName: string;
-    role: string;
-  };
-  createdAt: string;
-  isCurrentUser?: boolean;
-}
+import { Message, ChatRoom } from '../../../core/models/chat.model';
+import { environment } from '../../../../../environment/environment';
+import { ChatService } from '../../../core/services/chat.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-chat',
@@ -69,11 +44,15 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
+    private chatService: ChatService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getCurrentUserId();
+    const userId = this?.authService?.getCurrentUserId();
+    if(userId){
+      this.currentUserId = userId;
+    }
     this.fetchChatRooms();
     this.initSocketConnection();
   }
@@ -85,9 +64,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   initSocketConnection(): void {
-    this.socket = io(environment.socketUrl, {
+    this.socket = io(environment.backendUrl, {
       auth: {
-        token: this.authService.getToken()
+        token: localStorage.getItem('token')
       }
     });
 
@@ -102,12 +81,10 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   fetchChatRooms(): void {
     this.isLoading = true;
-    this.http.get<{success: boolean, chatRoom: ChatRoom[]}>(
-      `https://api.yourdomain.com/cases/${this.caseId}/chat-rooms`
-    ).subscribe({
+    this.chatService.getChatRoom(this.caseId).subscribe({
       next: (response) => {
         if (response.success) {
-          this.chatRooms = response.chatRoom.map(room => {
+          this.chatRooms = response.chatRoom.map((room: { memberIds: any[]; }) => {
             // Find the other member (not current user)
             const otherMemberId = room.memberIds.find(id => id !== this.currentUserId);
             // In a real app, you'd fetch user details for otherMemberId
@@ -139,24 +116,27 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.selectedRoom = room;
     this.isRoomLoading = true;
     
-    // Listen for new messages in this room
-    if (this.socket) {
-      this.socket.off(`newMessage-${room.chatRoomId}`); // Remove previous listener
-      this.socket.on(`newMessage-${room.chatRoomId}`, (message: Message) => {
-        this.handleNewMessage(message);
-      });
-    }
+    this.selectedRoom = room;
+    this.isRoomLoading = true;
+    
+    // Clear all previous message listeners to avoid duplicates
+    this.socket.off('newMessage'); // Remove any generic listeners
+    this.socket.off(`newMessage-${room.chatRoomId}`); // Remove specific room listener
+
+    // Set up new listener
+    this.socket.on(`newMessage-${room.chatRoomId}`, (message: Message) => {
+      console.log('New message received:', message); // Debug log
+      this.handleNewMessage(message);
+    });
 
     this.fetchMessages(room.chatRoomId);
   }
 
   fetchMessages(chatRoomId: string): void {
-    this.http.get<{success: boolean, messages: Message[]}>(
-      `https://api.yourdomain.com/chat-rooms/${chatRoomId}/messages`
-    ).subscribe({
+    this.chatService.getAllMessages(chatRoomId).subscribe({
       next: (response) => {
         if (response.success) {
-          this.messages = response.messages.map(msg => ({
+          this.messages = response.messages.map((msg: { senderId: string | null; }) => ({
             ...msg,
             isCurrentUser: msg.senderId === this.currentUserId
           }));
@@ -170,44 +150,92 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
+  // sendMessage(): void {
+  //   if (!this.newMessage.trim() || !this.selectedRoom || !this.socket) return;
+
+  //   const messageContent = this.newMessage.trim();
+  //   this.newMessage = '';
+
+  //   const dto = {
+  //     chatRoomId: this.selectedRoom.chatRoomId,
+  //     content: messageContent
+  //   };
+
+  //   this.socket.emit('sendMessage', dto, (response: Message) => {
+  //     // This callback is optional, handles the server's response
+  //     if (response) {
+  //       this.handleNewMessage({
+  //         ...response,
+  //         isCurrentUser: true
+  //       });
+  //     }
+  //   });
+  // }
+
+  // handleNewMessage(message: Message): void {
+  //   // Only add if it's for the currently selected room
+  //   if (this.selectedRoom && message.chatRoomId === this.selectedRoom.chatRoomId) {
+  //     this.messages = [
+  //       ...this.messages,
+  //       {
+  //         ...message,
+  //         isCurrentUser: message.senderId === this.currentUserId
+  //       }
+  //     ];
+  //     // Scroll to bottom
+  //     setTimeout(() => {
+  //       this.scrollToBottom();
+  //     }, 100);
+  //   }
+  // }
+
   sendMessage(): void {
-    if (!this.newMessage.trim() || !this.selectedRoom || !this.socket) return;
+  if (!this.newMessage.trim() || !this.selectedRoom || !this.socket) return;
 
-    const messageContent = this.newMessage.trim();
-    this.newMessage = '';
+  const messageContent = this.newMessage.trim();
+  this.newMessage = '';
 
-    const dto = {
-      chatRoomId: this.selectedRoom.chatRoomId,
-      content: messageContent
-    };
+  const dto = {
+    chatRoomId: this.selectedRoom.chatRoomId,
+    content: messageContent
+  };
 
-    this.socket.emit('sendMessage', dto, (response: Message) => {
-      // This callback is optional, handles the server's response
-      if (response) {
-        this.handleNewMessage({
+
+
+  this.socket.emit('sendMessage', dto, (response: Message) => {
+    if (response) {
+      // Replace the temporary message with the real one
+      this.messages = this.messages.map(msg => 
+        msg.messageId === response.messageId ? {
           ...response,
           isCurrentUser: true
-        });
-      }
-    });
-  }
-
-  handleNewMessage(message: Message): void {
-    // Only add if it's for the currently selected room
-    if (this.selectedRoom && message.chatRoomId === this.selectedRoom.chatRoomId) {
-      this.messages = [
-        ...this.messages,
-        {
-          ...message,
-          isCurrentUser: message.senderId === this.currentUserId
-        }
-      ];
-      // Scroll to bottom
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 100);
+        } : msg
+      );
+    } else {
+      
     }
+  });
+}
+
+handleNewMessage(message: Message): void {
+  // Check if message already exists to prevent duplicates
+  const messageExists = this.messages.some(m => 
+    m.messageId === message.messageId || 
+    (m.content === message.content && m.createdAt === message.createdAt)
+  );
+  
+  if (!messageExists && this.selectedRoom && message.chatRoomId === this.selectedRoom.chatRoomId) {
+    this.messages = [
+      ...this.messages,
+      {
+        ...message,
+        isCurrentUser: message.senderId === this.currentUserId
+      }
+    ];
+    
+    setTimeout(() => this.scrollToBottom(), 100);
   }
+}
 
   scrollToBottom(): void {
     const messagesContainer = document.querySelector('.messages-container');

@@ -51,7 +51,8 @@ export class ChatRepository{
                         role: true,
                     },
                     createdAt: true
-                }
+                },
+                order: { createdAt: 'ASC'}
             }); 
         }catch(error){
             console.error('Error in fetching all the Chat Messages: ', error.message);
