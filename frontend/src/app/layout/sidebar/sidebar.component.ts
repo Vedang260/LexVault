@@ -55,29 +55,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
       { label: 'Dashboard', icon: faHome, route: '/dashboard' },
       { label: 'All Cases', icon: faFolderOpen, route: '/all-cases' },
       { label: 'Clients', icon: faUser, route: '/clients' },
-      { label: 'Lawyers', icon: faUsers, route: '/lawyers' },
-      { label: 'Hearings', icon: faGavel, route: '/hearings' },
-      { label: 'Documents', icon: faFileAlt, route: '/documents' },
-      { label: 'Calendar', icon: faCalendarAlt, route: '/calendar' },
-      { label: 'Reports', icon: faChartBar, route: '/reports' },
-      { label: 'Settings', icon: faCog, route: '/settings' },
     ],
     lawyer: [
       { label: 'Dashboard', icon: faHome, route: '/dashboard' },
       { label: 'My Cases', icon: faBriefcase, route: '/cases' },
-      { label: 'Clients', icon: faUser, route: '/clients' },
-      { label: 'Hearings', icon: faGavel, route: '/hearings' },
-      { label: 'Documents', icon: faFileAlt, route: '/documents' },
-      { label: 'Calendar', icon: faCalendarAlt, route: '/calendar' },
-      { label: 'Settings', icon: faCog, route: '/settings' },
     ],
     client: [
       { label: 'Dashboard', icon: faHome, route: '/dashboard' },
       { label: 'Add New Case', icon: faAdd, route: '/client/addCase' },
       { label: 'My Cases', icon: faBriefcase, route: '/cases' },
-      { label: 'Documents', icon: faFileAlt, route: '/documents' },
-      { label: 'Chat', icon: faMessage, route: '/client/chat' },
-      { label: 'Settings', icon: faCog, route: '/settings' }
     ]
   };
 
