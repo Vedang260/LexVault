@@ -45,17 +45,25 @@ export class DocumentRepository{
         }
     }
 
-    async getCaseRelatedDocuments(caseId: string): Promise<Document[]>{
-        try{
-            return await this.documentRepository.find({
-                where: {caseId},
-                relations: ['tags'],
-            });
-        }catch(error){
+    async getCaseRelatedDocuments(caseId: string): Promise<any[]> {
+        try {
+            const documents = await this.documentRepository.createQueryBuilder('document')
+                .leftJoinAndSelect('document.tags', 'tag')
+                .leftJoin('document.uploadedBy', 'user')
+                .addSelect(['user.role']) // Only select the role
+                .where('document.caseId = :caseId', { caseId })
+                .getMany();
+
+            return documents.map(doc => ({
+                ...doc,
+                uploadedBy: { role: doc['uploadedBy']?.role }
+            }));
+        } catch (error) {
             console.error('Error in fetching case related documents: ', error.message);
             throw new InternalServerErrorException('Error in fetching case related documents');
         }
     }
+
 
     async getDocumentsOfClient(userId: string, caseId: string){
         try{

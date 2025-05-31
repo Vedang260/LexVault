@@ -9,11 +9,12 @@ import { CaseOverviewComponent } from '../case-overview/case-overview.component'
 import { NotesComponent } from '../notes/notes.component';
 import { EventsComponent } from '../events/events.component';
 import { ChatComponent } from '../chat/chat.component';
+import { DocumentsComponent } from '../documents/documents.component';
 
 @Component({
   selector: 'app-case-details',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, CaseOverviewComponent, NotesComponent, EventsComponent, ChatComponent],
+  imports: [CommonModule, FontAwesomeModule, CaseOverviewComponent, NotesComponent, EventsComponent, ChatComponent, DocumentsComponent],
   templateUrl: './case-details.component.html',
   styleUrls: ['./case-details.component.css']
 })
