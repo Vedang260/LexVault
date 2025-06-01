@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { TimeEntry } from "../entities/timeEntry.entity";
 import { Repository } from "typeorm";
 import { CreateTimeEntryDto } from "../dtos/createTimeEntry.dto";
+import { UpdateTimeEntryDto } from "../dtos/updateTimeEntry.dto";
 
 @Injectable()
 export class TimeEntryRepository{
@@ -23,21 +24,27 @@ export class TimeEntryRepository{
 
     async getAllTimeEntriesByCase(caseId: string){
         try{
-
+            return await this.timeEntryRepository.find({
+                where: { caseId }
+            });
         }catch(error){
             console.error('Error in fetching the time entries of case: ', error.message);
             throw new InternalServerErrorException('Error in fetching the time entries of the case');
         }
     }
 
-    // async updateTimeEntries(timeEntryId: string, ){
-    //     try{
-
-    //     }catch(error){
-    //         console.error('Error in updating the time entries: ', error.message);
-    //         throw new InternalServerErrorException('Error in updating the time entries of the case');
-    //     }
-    // }
+    async updateTimeEntry(timeEntryId: string, updateTimeEntryDto: UpdateTimeEntryDto){
+        try{
+            const result = await this.timeEntryRepository.update({
+                timeEntryId,
+                
+            }, updateTimeEntryDto);
+            return result.affected ? result.affected>0 : false;
+        }catch(error){
+            console.error('Error in updating the time entries: ', error.message);
+            throw new InternalServerErrorException('Error in updating the time entries of the case');
+        }
+    }
 
     async deleteTimeEntry(timeEntryId: string){
         try{

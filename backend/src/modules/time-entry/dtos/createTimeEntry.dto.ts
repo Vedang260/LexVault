@@ -5,6 +5,9 @@ export class CreateTimeEntryDto{
     caseId: string;
 
     @IsNotEmpty()
+    date: string
+
+    @IsNotEmpty()
     startTime: Date;
 
     @IsNotEmpty()
@@ -15,6 +18,9 @@ export class CreateTimeEntryDto{
 
     @IsNotEmpty()
     title: string;
+
+    @IsNotEmpty()
+    description: string;
 
     @IsOptional()
     billable: boolean;

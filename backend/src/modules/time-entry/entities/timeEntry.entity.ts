@@ -1,6 +1,6 @@
 import { Case } from "src/modules/case/entities/case.entity";
 import { User } from "src/modules/user/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'time-entry'})
 export class TimeEntry{
@@ -13,6 +13,9 @@ export class TimeEntry{
     @Column({ type: 'uuid'})
     caseId: string;
 
+    @Column({ type: 'date' })
+    date: string; 
+
     @Column({ type: 'timestamp' })
     startTime: Date;
 
@@ -24,6 +27,9 @@ export class TimeEntry{
 
     @Column('text')
     title: string;
+
+    @Column('text')
+    description: string;
 
     @Column({ default: true })
     billable: boolean;
@@ -39,4 +45,11 @@ export class TimeEntry{
     @ManyToOne(() => Case, (caseEntity) => caseEntity.timeEntries)
     @JoinColumn({ name: 'caseId' })
     case: Case;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
 }

@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { TimeEntryRepository } from "../repositories/timeEntry.repository";
 import { CreateTimeEntryDto } from "../dtos/createTimeEntry.dto";
+import { UpdateTimeEntryDto } from "../dtos/updateTimeEntry.dto";
 
 @Injectable()
 export class TimeEntryService{
@@ -50,6 +51,22 @@ export class TimeEntryService{
             return{
                 success: false,
                 message: 'Failed to delete a time entry'
+            }
+        }
+    }
+
+    async updateTimeEntry(timeEntryId: string, updateTimeEntryDto: UpdateTimeEntryDto){
+        try{
+            const result = await this.timeEntryRepository.updateTimeEntry(timeEntryId, updateTimeEntryDto);
+            return{
+                success: true,
+                message: 'Time Entry is updated successfully'
+            }
+        }catch(error){
+            console.error('Error in updating the time entry: ', error.message);
+            return{
+                success: false,
+                message: 'Failed to update a time entry'
             }
         }
     }
