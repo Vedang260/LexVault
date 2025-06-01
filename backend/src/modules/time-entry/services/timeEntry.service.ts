@@ -12,6 +12,10 @@ export class TimeEntryService{
     async createTimeEntry(userId: string, createTimeEntryDto: Partial<CreateTimeEntryDto>){
         try{
             const newTimeEntry = await this.timeEntryRepository.createNewEntry(userId, createTimeEntryDto);
+            return {
+                success: true,
+                message: 'New Time Entry is created successfully'
+            }
         }catch(error){
             console.error('Error in creating a new Time Entry: ', error.message);
             return{
