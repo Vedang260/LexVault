@@ -74,6 +74,12 @@ export class TimeEntryComponent implements OnInit {
     this.fetchTimeEntries();
   }
 
+  closeModal() {
+    this.modalService.dismissAll();
+    this.isCreating = false;
+    this.isEditing = false;
+    this.selectedEntry = null;
+  }
   fetchTimeEntries(): void {
     this.isLoading = true;
     this.timeEntryService.getAllTimeEntries(this.caseId).subscribe({
@@ -136,11 +142,20 @@ export class TimeEntryComponent implements OnInit {
     return new Date(dateString).toLocaleDateString(undefined, options);
   }
 
-  formatTime(timeString: string): string {
-    if (!timeString) return '';
-    const date = new Date(timeString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
+formatTime(timeString: string): string {
+  if (!timeString) return '';
+  
+  // Parse the input string as UTC
+  const date = new Date(timeString);
+  
+  // Convert to IST (UTC+5:30) for display
+  return date.toLocaleTimeString('en-IN', { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: true,  // Use 12-hour format (optional)
+    timeZone: 'Asia/Kolkata'  // Official IANA timezone for IST
+  });
+}
 
   formatDuration(minutes: number): string {
     const hours = Math.floor(minutes / 60);
@@ -212,8 +227,8 @@ export class TimeEntryComponent implements OnInit {
         next: (response) => {
           if (response.success) {
             //this.timeEntries.unshift(response.timeEntry);
-            this.applyFilters();
-            this.modalService.dismissAll();
+            this.closeModal();
+            this.fetchTimeEntries(); 
           }
         },
         error: (error) => {
@@ -227,12 +242,8 @@ export class TimeEntryComponent implements OnInit {
       ).subscribe({
         next: (response) => {
           if (response.success) {
-            //const index = this.timeEntries.findIndex(e => e.timeEntryId === response.timeEntry.timeEntryId);
-            // if (index !== -1) {
-            //   this.timeEntries[index] = response.timeEntry;
-            //   this.applyFilters();
-            //   this.modalService.dismissAll();
-            // }
+            this.closeModal();
+            this.fetchTimeEntries();
           }
         },
         error: (error) => {
@@ -244,9 +255,7 @@ export class TimeEntryComponent implements OnInit {
 
   confirmDelete(entry: TimeEntry): void {
     if (confirm('Are you sure you want to delete this time entry?')) {
-      this.http.delete<{success: boolean}>(
-        `https://api.yourdomain.com/time-entries/${entry.timeEntryId}`
-      ).subscribe({
+      this.timeEntryService.deletTimeEntry(entry.timeEntryId).subscribe({
         next: (response) => {
           if (response.success) {
             this.timeEntries = this.timeEntries.filter(e => e.timeEntryId !== entry.timeEntryId);

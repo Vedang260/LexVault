@@ -172,7 +172,7 @@
     </div>
     
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Close</button>
+      <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
     </div>
   </ng-template>
 
@@ -181,7 +181,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h3>{{ isCreating ? 'Create New Time Entry' : 'Edit Time Entry' }}</h3>
-        <button (click)="modalService.dismissAll()" class="close-button">
+        <button (click)="closeModal()" class="close-button">
           <fa-icon [icon]="faTimes"></fa-icon>
         </button>
       </div>
@@ -247,7 +247,7 @@
           </div>
           
           <div class="form-actions">
-            <button type="button" (click)="modalService.dismissAll()" class="cancel-button">
+            <button type="button" (click)="closeModal()" class="cancel-button">
               Cancel
             </button>
             <button type="submit" class="save-button">

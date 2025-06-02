@@ -25,3 +25,5 @@ export interface Response{
 export interface GetAllTimeEntries extends Response{
     timeEntries: TimeEntry[];
 }
+
+export interface UpdateTimeEntry extends TimeEntry{}

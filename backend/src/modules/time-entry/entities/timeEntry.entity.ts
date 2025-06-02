@@ -16,10 +16,10 @@ export class TimeEntry{
     @Column({ type: 'date' })
     date: string; 
 
-    @Column({ type: 'timestamp' })
+    @Column()
     startTime: Date;
 
-    @Column({ type: 'timestamp' })
+    @Column()
     endTime: Date;
 
     @Column()

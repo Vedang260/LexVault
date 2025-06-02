@@ -2,8 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environment/environment';
-import { CreateNote, CreateNoteResponse, DeleteNoteResponse, GetAllNotes, UpdateNote, UpdateNoteResponse } from '../models/note.model';
-import { CreateTimeEntry, GetAllTimeEntries, Response } from '../models/timeEntry.model';
+import { CreateTimeEntry, GetAllTimeEntries, Response, UpdateTimeEntry } from '../models/timeEntry.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +18,7 @@ export class TimeEntryService {
         return this.http.post<Response>(`${this.apiUrl}/api/time-entry/create`, data, { headers: this.headers });
     }
 
-    updateTimeEntry(timeEntryId: any, data: UpdateNote): Observable<Response>{
+    updateTimeEntry(timeEntryId: any, data: UpdateTimeEntry): Observable<Response>{
         return this.http.put<Response>(`${this.apiUrl}/api/time-entry/${timeEntryId}`, data, { headers: this.headers });
     }
 
