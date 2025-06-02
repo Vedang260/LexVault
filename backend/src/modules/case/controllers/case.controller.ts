@@ -59,4 +59,8 @@ export class CaseController{
         const {caseId, lawyerIds} = body;
         return await this.caseService.assignLawyers(caseId, lawyerIds);
     }
+
+    async getClientCases(){
+        
+    }
 }

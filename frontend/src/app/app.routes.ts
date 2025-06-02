@@ -13,6 +13,9 @@ export const routes: Routes = [
             children: [{
                 path: 'addCase',
                 loadComponent: () => import('./features/client/add-case/add-case.component').then(m => m.AddCaseComponent)
+            },{
+                path: 'cases-dashboard',
+                loadComponent: () => import('./features/client/cases/cases-dashboard.component').then(m => m.CasesDashboardComponent)
             }]
         },{
             path: 'lawyer',

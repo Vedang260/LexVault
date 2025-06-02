@@ -63,7 +63,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     client: [
       { label: 'Dashboard', icon: faHome, route: '/dashboard' },
       { label: 'Add New Case', icon: faAdd, route: '/client/addCase' },
-      { label: 'My Cases', icon: faBriefcase, route: '/cases' },
+      { label: 'My Cases', icon: faBriefcase, route: '/client/cases-dashboard' },
     ]
   };
 
