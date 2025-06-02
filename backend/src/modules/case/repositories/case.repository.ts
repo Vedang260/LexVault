@@ -160,4 +160,16 @@ export class CaseRepository{
             throw new InternalServerErrorException('Failed to fetch the assigned cases of Lawyers');
         }
     }
+
+    async getClientCases(clientId: string){
+        try{
+            return await this.caseRepository
+            .createQueryBuilder('case')
+            .where('case.clientId = :clientId', { clientId }) // updated condition
+            .getMany();
+        }catch(error){
+            console.error('Error in fetching the client cases: ', error.message);
+            throw new InternalServerErrorException('Error in fetching the client cases');
+        }
+    }
 }

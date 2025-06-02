@@ -146,4 +146,28 @@ export class CaseService{
 
         }
     }
+
+    async getClientCases(clientId: string){
+        try{
+            const cases = await this.caseRepository.getClientCases(clientId);
+            if(cases){
+                return{
+                    success: true,
+                    message: 'Your cases are arrived successfully',
+                    cases: cases
+                }
+            }
+            return{
+                success: false,
+                message: 'Failed to fetch your assigned cases'
+            }
+        }catch(error){
+            console.error('Error in fetching the client cases: ', error.message);
+            return{
+                success: false,
+                message: 'Failed to fetch the client cases',
+                cases: null
+            }
+        }
+    }
 }

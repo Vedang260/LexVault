@@ -26,6 +26,10 @@ export class CaseService {
       return this.http.get<GetCaseDetails>(`${this.apiUrl}/api/case/case-details/${caseId}`, { headers: this.headers });
     }
 
+    getClientCases(): Observable<any>{
+      return this.http.get<any>(`${this.apiUrl}/api/case`, { headers: this.headers });
+    }
+
 //   getArticle(articleId: string): Observable<any> {
 //     return this.http.get(`http://localhost:8000/api/articles/${articleId}`, {headers: this.headers});
 //   }

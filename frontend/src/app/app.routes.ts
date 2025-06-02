@@ -26,7 +26,7 @@ export const routes: Routes = [
             }]
         }, {
             path: 'cases',
-            canActivate: [RoleGuard([Role.ADMIN, Role.LAWYER])],
+            canActivate: [RoleGuard([Role.ADMIN, Role.LAWYER, Role.CLIENT])],
             children: [{
                 path: `case-details/:caseId`,
                 loadComponent: () => import('./features/cases/case-details/case-details.component').then(m => m.CaseDetailsComponent) 

@@ -109,25 +109,25 @@ export class CasesDashboardComponent implements OnInit {
   constructor(private http: HttpClient, private caseService: CaseService) {}
 
   ngOnInit(): void {
-    //this.fetchCases();
+    this.fetchCases();
   }
 
-    // fetchCases(): void {
-    //     this.isLoading = true;
-    //     this.caseService.getClientCases().subscribe({
-    //         next: (response) => {
-    //             if(response.cases){
-    //                 this.cases = response.cases;
-    //                 this.filteredCases = [...this.cases];
-    //             }
-    //         this.isLoading = false;
-    //         },
-    //         error: (error) => {
-    //         console.error('Error fetching assigned cases:', error);
-    //         this.isLoading = false;
-    //         }
-    //     });
-    // }
+    fetchCases(): void {
+        this.isLoading = true;
+        this.caseService.getClientCases().subscribe({
+            next: (response) => {
+                if(response.cases){
+                    this.cases = response.cases;
+                    this.filteredCases = [...this.cases];
+                }
+            this.isLoading = false;
+            },
+            error: (error) => {
+            console.error('Error fetching assigned cases:', error);
+            this.isLoading = false;
+            }
+        });
+    }
 
 
   applyFilters(): void {

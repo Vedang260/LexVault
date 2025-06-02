@@ -60,7 +60,10 @@ export class CaseController{
         return await this.caseService.assignLawyers(caseId, lawyerIds);
     }
 
-    async getClientCases(){
-        
+    @Get()
+    @UseGuards(RolesGuard)
+    @Roles(UserRole.ADMIN, UserRole.CLIENT)
+    async getClientCases(@Req() req: Request){
+        return await this.caseService.getClientCases(req['user'].userId);
     }
 }
