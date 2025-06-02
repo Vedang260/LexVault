@@ -36,3 +36,8 @@ export interface GetAllTagResponse{
     message: string;
     tags: Tag[];
 }
+
+export interface CreateDocumentResponse{
+    success: boolean;
+    message: string;
+}

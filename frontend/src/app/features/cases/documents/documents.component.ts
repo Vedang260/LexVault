@@ -303,14 +303,10 @@ export class DocumentsComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('file', this.selectedFile);
-
-    this.http.post<{success: boolean, documentUrl: string}>(
-      'https://api.yourdomain.com/upload',
-      formData
-    ).subscribe({
+    this.documentService.uploadDocument(formData).subscribe({
       next: (response) => {
         if (response.success) {
-          this.documentForm.documentUrl = response.documentUrl;
+          this.documentForm.documentUrl = response.url;
           this.saveDocument();
         }
       },
@@ -327,15 +323,15 @@ export class DocumentsComponent implements OnInit {
     };
 
     if (this.isCreating) {
-      this.http.post<{success: boolean, document: Document}>(
-        'https://api.yourdomain.com/documents',
+      this.documentService.createNewDocument(
         payload
       ).subscribe({
         next: (response) => {
           if (response.success) {
-            this.documents.unshift(response.document);
+            // this.documents.unshift(response.document);
             this.applyFilters();
             this.cancelForm();
+            this.ngOnInit();
           }
         },
         error: (error) => {

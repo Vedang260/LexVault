@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environment/environment';
 import { CreateNote, CreateNoteResponse, DeleteNoteResponse, GetAllNotes, UpdateNote, UpdateNoteResponse } from '../models/note.model';
-import { GetAllDocumentsResponse, GetAllTagResponse } from '../models/document.model';
+import { CreateDocumentResponse, GetAllDocumentsResponse, GetAllTagResponse } from '../models/document.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +15,8 @@ export class DocumentService {
 
     constructor(private http: HttpClient) {}
 
-    createNewDocument(data: CreateNote): Observable<CreateNoteResponse> {
-        return this.http.post<CreateNoteResponse>(`${this.apiUrl}/api/documents/create`, data, { headers: this.headers });
+    createNewDocument(data: any): Observable<CreateDocumentResponse> {
+        return this.http.post<CreateDocumentResponse>(`${this.apiUrl}/api/documents/create`, data, { headers: this.headers });
     }
 
     updateDocument(noteId: any, data: UpdateNote): Observable<UpdateNoteResponse>{
@@ -33,5 +33,9 @@ export class DocumentService {
 
     getAllTags(): Observable<GetAllTagResponse>{
         return this.http.get<GetAllTagResponse>(`${this.apiUrl}/api/tags`, { headers: this.headers });
+    }
+
+    uploadDocument(data: any): Observable<any>{
+        return this.http.post<any>(`${this.apiUrl}/api/upload/document`, data, { headers: this.headers });
     }
 }

@@ -172,8 +172,13 @@
           
           <div *ngIf="isCreating || !documentForm.documentUrl" class="form-group">
             <label>Document File</label>
-            <div class="file-upload">
-              <input type="file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+            <label class="file-upload">
+              <input 
+                type="file" 
+                (change)="onFileSelected($event)" 
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                #fileInput
+                style="display: none">
               <div *ngIf="selectedFile" class="file-info">
                 Selected: {{ selectedFile.name }}
               </div>
@@ -181,10 +186,9 @@
                 <fa-icon [icon]="faFileAlt"></fa-icon>
                 <span>Choose a file</span>
               </div>
-            </div>
+            </label>
             <small>Supported formats: PDF, Word, Excel, Images</small>
           </div>
-          
           <div *ngIf="documentForm.documentUrl && !isCreating" class="form-group">
             <label>Current Document</label>
             <div class="current-document">
