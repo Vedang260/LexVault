@@ -10,11 +10,12 @@ import { NotesComponent } from '../notes/notes.component';
 import { EventsComponent } from '../events/events.component';
 import { ChatComponent } from '../chat/chat.component';
 import { DocumentsComponent } from '../documents/documents.component';
+import { TimeEntryComponent } from '../time-entry/time-entry.component';
 
 @Component({
   selector: 'app-case-details',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, CaseOverviewComponent, NotesComponent, EventsComponent, ChatComponent, DocumentsComponent],
+  imports: [CommonModule, FontAwesomeModule, CaseOverviewComponent, NotesComponent, EventsComponent, ChatComponent, DocumentsComponent, TimeEntryComponent],
   templateUrl: './case-details.component.html',
   styleUrls: ['./case-details.component.css']
 })
@@ -42,6 +43,7 @@ export class CaseDetailsComponent implements OnInit {
     { id: 'notes', title: 'Notes' },
     { id: 'events', title: 'Timeline & Hearing' },
     { id: 'chat', title: 'Chat' },
+    { id: 'time-entry', title: 'Time-Entry' },
     { id: 'invoice', title: 'Invoice & Payments' }
   ];
 

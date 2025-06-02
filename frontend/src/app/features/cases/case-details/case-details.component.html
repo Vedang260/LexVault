@@ -42,7 +42,7 @@
       <app-notes [caseId]="caseId"></app-notes>
     </div>
 
-    <!-- Notes Tab -->
+    <!-- Events Tab -->
     <div *ngIf="activeTab === 'events'">
       <app-events [caseId]="caseId"></app-events>
     </div>
@@ -55,6 +55,11 @@
     <!-- Chat Tab -->
     <div *ngIf="activeTab === 'chat'">
       <app-chat [caseId]="caseId"></app-chat>
+    </div>
+
+    <!-- Time-Entry Tab -->
+    <div *ngIf="activeTab === 'time-entry'">
+      <app-time-entry [caseId]="caseId"></app-time-entry>
     </div>
 
     <!-- Invoice & Payments Tab -->

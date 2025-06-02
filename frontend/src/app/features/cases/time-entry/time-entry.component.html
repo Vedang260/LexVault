@@ -1,0 +1,261 @@
+<div class="time-entry-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading time entries...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading" class="time-entry-content">
+    <!-- Header with Actions -->
+    <div class="time-entry-header">
+      <h2>Time Entries</h2>
+      <div class="actions">
+        <button (click)="toggleFilters()" class="filter-button">
+          <fa-icon [icon]="faFilter"></fa-icon> Filters
+        </button>
+        <button (click)="startCreating()" class="new-entry-button">
+          <fa-icon [icon]="faPlus"></fa-icon> New Entry
+        </button>
+      </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-filter">
+      <div class="search-box">
+        <fa-icon [icon]="faSearch"></fa-icon>
+        <input 
+          [(ngModel)]="searchQuery" 
+          (input)="applyFilters()"
+          type="text" 
+          placeholder="Search time entries...">
+      </div>
+
+      <div *ngIf="showFilters" class="filters-panel">
+        <div class="filter-group">
+          <label>Billable Status</label>
+          <select [(ngModel)]="billableFilter" (change)="applyFilters()">
+            <option value="all">All</option>
+            <option value="billable">Billable</option>
+            <option value="non-billable">Non-billable</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Billed Status</label>
+          <select [(ngModel)]="billedFilter" (change)="applyFilters()">
+            <option value="all">All</option>
+            <option value="billed">Billed</option>
+            <option value="unbilled">Unbilled</option>
+          </select>
+        </div>
+
+        <button (click)="resetFilters()" class="reset-button">Reset Filters</button>
+      </div>
+    </div>
+
+    <!-- Time Entries Table -->
+    <div class="table-responsive">
+      <table class="time-entries-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Title</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th class="text-center">Billable</th>
+            <th class="text-center">Billed</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of filteredEntries">
+            <td>{{ formatDate(entry.date) }}</td>
+            <td>{{ entry.title }}</td>
+            <td>{{ formatTime(entry.startTime) }} - {{ formatTime(entry.endTime) }}</td>
+            <td>{{ formatDuration(entry.duration) }}</td>
+            <td class="text-center">
+              <fa-icon 
+                [icon]="entry.billable ? faCheck : faTimes" 
+                [class.text-success]="entry.billable" 
+                [class.text-danger]="!entry.billable">
+              </fa-icon>
+            </td>
+            <td class="text-center">
+              <fa-icon 
+                [icon]="entry.billed ? faCheck : faTimes" 
+                [class.text-success]="entry.billed" 
+                [class.text-danger]="!entry.billed">
+              </fa-icon>
+            </td>
+            <td class="actions">
+              <button (click)="viewEntry(entry, viewModal)" class="action-button view">
+                <fa-icon [icon]="faEye"></fa-icon>
+              </button>
+              <button (click)="startEditing(entry)" class="action-button edit">
+                <fa-icon [icon]="faEdit"></fa-icon>
+              </button>
+              <button (click)="confirmDelete(entry)" class="action-button delete">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredEntries.length === 0">
+            <td colspan="7" class="no-entries">No time entries found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- View Modal -->
+  <ng-template #viewModal let-modal>
+    <div class="custom-modal-container">
+      <div class="custom-modal-dialog">
+        <div class="custom-modal-content">
+<div class="modal-header">
+      <h3>Time Entry Details</h3>
+      <button type="button" class="close" (click)="modal.dismiss()">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="selectedEntry" class="entry-details">
+        <div class="detail-row">
+          <span class="detail-label">Title:</span>
+          <span class="detail-value">{{ selectedEntry.title }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Date:</span>
+          <span class="detail-value">{{ formatDate(selectedEntry.date) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Time:</span>
+          <span class="detail-value">
+            {{ formatTime(selectedEntry.startTime) }} - {{ formatTime(selectedEntry.endTime) }}
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Duration:</span>
+          <span class="detail-value">{{ formatDuration(selectedEntry.duration) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Billable:</span>
+          <span class="detail-value">
+            <fa-icon 
+              [icon]="selectedEntry.billable ? faCheck : faTimes" 
+              [class.text-success]="selectedEntry.billable" 
+              [class.text-danger]="!selectedEntry.billable">
+            </fa-icon>
+            {{ selectedEntry.billable ? 'Yes' : 'No' }}
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Billed:</span>
+          <span class="detail-value">
+            <fa-icon 
+              [icon]="selectedEntry.billed ? faCheck : faTimes" 
+              [class.text-success]="selectedEntry.billed" 
+              [class.text-danger]="!selectedEntry.billed">
+            </fa-icon>
+            {{ selectedEntry.billed ? 'Yes' : 'No' }}
+          </span>
+        </div>
+        <div class="detail-row full-width">
+          <span class="detail-label">Description:</span>
+          <span class="detail-value">{{ selectedEntry.description }}</span>
+        </div>
+      </div>
+    </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Create/Edit Modal -->
+  <div *ngIf="isCreating || isEditing" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ isCreating ? 'Create New Time Entry' : 'Edit Time Entry' }}</h3>
+        <button (click)="modalService.dismissAll()" class="close-button">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <form (submit)="saveTimeEntry(); $event.preventDefault()">
+          <div class="form-group">
+            <label>Title</label>
+            <input [(ngModel)]="timeEntryForm.title" name="title" type="text" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input [(ngModel)]="timeEntryForm.date" name="date" type="date" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Start Time</label>
+              <input 
+                [(ngModel)]="timeEntryForm.startTime" 
+                name="startTime" 
+                type="time" 
+                required
+                (change)="calculateDuration()">
+            </div>
+            
+            <div class="form-group">
+              <label>End Time</label>
+              <input 
+                [(ngModel)]="timeEntryForm.endTime" 
+                name="endTime" 
+                type="time" 
+                required
+                (change)="calculateDuration()">
+            </div>
+            
+            <div class="form-group">
+              <label>Duration (minutes)</label>
+              <input [(ngModel)]="timeEntryForm.duration" name="duration" type="number" min="1" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Description</label>
+            <textarea [(ngModel)]="timeEntryForm.description" name="description" rows="4"></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>
+                <input type="checkbox" [(ngModel)]="timeEntryForm.billable" name="billable">
+                Billable
+              </label>
+            </div>
+            
+            <div class="form-group">
+              <label>
+                <input type="checkbox" [(ngModel)]="timeEntryForm.billed" name="billed">
+                Billed
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" (click)="modalService.dismissAll()" class="cancel-button">
+              Cancel
+            </button>
+            <button type="submit" class="save-button">
+              {{ isCreating ? 'Create Entry' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
